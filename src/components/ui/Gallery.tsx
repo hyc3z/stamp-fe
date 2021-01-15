@@ -105,11 +105,11 @@ class Gallery extends React.Component {
                             <h3>React Admin</h3>
                             <small>
                                 <a
-                                    href="https://yezihaohao.github.io/"
+                                    href="https://hyc3z.github.io/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    https://yezihaohao.github.io/
+                                    https://hyc3z.github.io/
                                 </a>
                             </small>
                         </div>

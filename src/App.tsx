@@ -38,27 +38,27 @@ class App extends Component<AppProps> {
     componentDidMount() {
         const openNotification = () => {
             notification.open({
-                message: '博主-yezihaohao',
+                message: '博主-hyc3z',
                 description: (
                     <div>
                         <p>
                             GitHub地址：{' '}
                             <a
-                                href="https://github.com/yezihaohao"
+                                href="https://github.com/hyc3z"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                https://github.com/yezihaohao
+                                https://github.com/hyc3z
                             </a>
                         </p>
                         <p>
                             博客地址：{' '}
                             <a
-                                href="https://yezihaohao.github.io/"
+                                href="https://hyc3z.github.io/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                https://yezihaohao.github.io/
+                                https://hyc3z.github.io/
                             </a>
                         </p>
                     </div>
