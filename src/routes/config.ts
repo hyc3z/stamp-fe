@@ -22,28 +22,35 @@ const menus: {
         // 菜单相关路由
         // { key: '/app/dashboard/index', title: '首页', icon: 'mobile', component: 'Dashboard' },
         {
-            key: '/app/task',
+            key: '/task',
             title: '任务管理',
             icon: 'copy',
             subs: [
-                { key: '/app/task/taskList', title: '任务列表', component: 'AdvancedTable' },
-                { key: '/app/task/taskCreate', title: '任务创建', component: 'BasicForm'}
+                { key: '/task/taskList', title: '任务列表', component: 'AdvancedTable' },
+                { key: '/task/taskCreate', title: '任务创建', component: 'BasicForm'}
             ],
         },
         {
-            key: '/app/cluster',
-            title: 'xx管理',
+            key: '/cluster',
+            title: '集群监控',
             icon: 'area-chart',
             subs: [
-                { key: '/app/cluster/monitor', title: '监控', component: 'Echarts' },
+                { key: '/cluster/monitor', title: '监控', component: 'Echarts' },
             ]
         },
         {
-            key: '/app/info',
-            title: '操作说明',
+            key: '/script',
+            title: '脚本管理',
             icon: 'edit',
+
+        },
+        {
+            key: '/info',
+            title: '操作说明',
+            icon: 'search',
             
         }
+        
         
         //     key: '/app/ui',
         //     title: 'UI',

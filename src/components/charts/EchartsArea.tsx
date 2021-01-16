@@ -26,7 +26,7 @@ const option = {
     },
     title: {
         left: 'center',
-        text: '大数据量面积图',
+        text: '集群整体负载',
     },
     toolbox: {
         feature: {

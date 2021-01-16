@@ -23,6 +23,16 @@ import { FormProps } from 'antd/lib/form';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+const resourceTypes = [
+    {
+        value: 'CPU',
+        label: 'Cpu 核心数量',
+    }
+]
+
+const taskScript = [
+    {}
+]
 const residences = [
     {
         value: 'zhejiang',
@@ -126,26 +136,26 @@ class BasicForms extends Component<BasicFormProps> {
         return (
             <div className="gutter-example">
                 <BreadcrumbCustom first="表单" second="基础表单" />
-                <Row gutter={16}>
-                    <Col className="gutter-row" md={12}>
+                <Row>
+                    <Col className="gutter-row">
                         <div className="gutter-box">
-                            <Card title="注册表单" bordered={false}>
+                            <Card title="任务创建" bordered={false}>
                                 <Form onSubmit={this.handleSubmit}>
-                                    <FormItem {...formItemLayout} label="邮箱" hasFeedback>
-                                        {getFieldDecorator('email', {
+                                    <FormItem {...formItemLayout} label="名称" hasFeedback>
+                                        {getFieldDecorator('task_name', {
                                             rules: [
                                                 {
-                                                    type: 'email',
-                                                    message: '请输入合理的邮箱地址!',
+                                                    type: 'task_name',
+                                                    message: '请输入合理的任务名称!',
                                                 },
                                                 {
                                                     required: true,
-                                                    message: '请输入邮箱地址!',
+                                                    message: '请输入任务名称!',
                                                 },
                                             ],
                                         })(<Input />)}
                                     </FormItem>
-                                    <FormItem {...formItemLayout} label="密码" hasFeedback>
+                                    {/* <FormItem {...formItemLayout} label="密码" hasFeedback>
                                         {getFieldDecorator('password', {
                                             rules: [
                                                 {
@@ -175,49 +185,44 @@ class BasicForms extends Component<BasicFormProps> {
                                                 onBlur={this.handleConfirmBlur}
                                             />
                                         )}
+                                    </FormItem> */}
+                                    
+                                    <FormItem {...formItemLayout} label="资源类型">
+                                        {getFieldDecorator('res_type', {
+                                            initialValue: ['CPU'],
+                        
+                                        })(<Cascader options={resourceTypes} />)}
                                     </FormItem>
                                     <FormItem
                                         {...formItemLayout}
                                         label={
                                             <span>
-                                                昵称&nbsp;
-                                                <Tooltip title="别人怎么称呼你?">
+                                                资源数量
+                                                <Tooltip title="资源类型为CPU：代表任务需要的CPU核心个数">
                                                     <Icon type="question-circle-o" />
                                                 </Tooltip>
                                             </span>
                                         }
                                         hasFeedback
                                     >
-                                        {getFieldDecorator('nickname', {
+                                        {getFieldDecorator('res_amount', {
                                             rules: [
                                                 {
                                                     required: true,
-                                                    message: '请输入昵称!',
-                                                    whitespace: true,
+                                                    message: '请输入资源数量!',
+                                                    whitespace: false,
+
                                                 },
                                             ],
                                         })(<Input />)}
                                     </FormItem>
-                                    <FormItem {...formItemLayout} label="常住地址">
-                                        {getFieldDecorator('residence', {
-                                            initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-                                            rules: [
-                                                {
-                                                    type: 'array',
-                                                    required: true,
-                                                    message: '请选择你的常住地址!',
-                                                },
-                                            ],
-                                        })(<Cascader options={residences} />)}
+                                    <FormItem {...formItemLayout} label="任务脚本">
+                                        {getFieldDecorator('task_script', {
+                                            initialValue: [''],
+                        
+                                        })(<Cascader options={taskScript} />)}
                                     </FormItem>
-                                    <FormItem {...formItemLayout} label="电话号码">
-                                        {getFieldDecorator('phone', {
-                                            rules: [
-                                                { required: true, message: '请输入你的电话号码!' },
-                                            ],
-                                        })(<Input addonBefore={prefixSelector} />)}
-                                    </FormItem>
-                                    <FormItem
+                                    {/* <FormItem
                                         {...formItemLayout}
                                         label="验证码"
                                         extra="我们必须确认你不是机器人."
@@ -237,8 +242,8 @@ class BasicForms extends Component<BasicFormProps> {
                                                 <Button size="large">获取验证码</Button>
                                             </Col>
                                         </Row>
-                                    </FormItem>
-                                    <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
+                                    </FormItem> */}
+                                    {/* <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
                                         {getFieldDecorator('agreement', {
                                             valuePropName: 'checked',
                                         })(
@@ -246,25 +251,25 @@ class BasicForms extends Component<BasicFormProps> {
                                                 我已经阅读过 <span>协议</span>
                                             </Checkbox>
                                         )}
-                                    </FormItem>
+                                    </FormItem> */}
                                     <FormItem {...tailFormItemLayout}>
                                         <Button type="primary" htmlType="submit" size="large">
-                                            注册
+                                            提交任务
                                         </Button>
                                     </FormItem>
                                 </Form>
                             </Card>
                         </div>
                     </Col>
-                    <Col className="gutter-row" md={12}>
+                    {/* <Col className="gutter-row" md={12}>
                         <div className="gutter-box">
                             <Card title="登录表单" bordered={false}>
                                 <LoginForm />
                             </Card>
                         </div>
-                    </Col>
+                    </Col> */}
                 </Row>
-                <Row gutter={16}>
+                {/* <Row gutter={16}>
                     <Col className="gutter-row" md={14}>
                         <div className="gutter-box">
                             <Card title="水平表单" bordered={false}>
@@ -279,7 +284,7 @@ class BasicForms extends Component<BasicFormProps> {
                             </Card>
                         </div>
                     </Col>
-                </Row>
+                </Row> */}
             </div>
         );
     }
