@@ -22,30 +22,30 @@ const menus: {
         // 菜单相关路由
         // { key: '/app/dashboard/index', title: '首页', icon: 'mobile', component: 'Dashboard' },
         {
-            key: '/task',
+            key: '/hpc/task',
             title: '任务管理',
             icon: 'copy',
             subs: [
-                { key: '/task/taskList', title: '任务列表', component: 'AdvancedTable' },
-                { key: '/task/taskCreate', title: '任务创建', component: 'BasicForm'}
+                { key: '/hpc/task/taskList', title: '任务列表', component: 'AdvancedTable' },
+                { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm'}
             ],
         },
         {
-            key: '/cluster',
+            key: '/hpc/cluster',
             title: '集群监控',
             icon: 'area-chart',
             subs: [
-                { key: '/cluster/monitor', title: '监控', component: 'Echarts' },
+                { key: '/hpc/cluster/monitor', title: '监控', component: 'Echarts' },
             ]
         },
         {
-            key: '/script',
+            key: '/hpc/script',
             title: '脚本管理',
             icon: 'edit',
 
         },
         {
-            key: '/info',
+            key: '/hpc/info',
             title: '操作说明',
             icon: 'search',
             

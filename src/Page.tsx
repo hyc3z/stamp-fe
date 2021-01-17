@@ -7,8 +7,8 @@ import App from './App';
 export default () => (
     <Router>
         <Switch>
-            <Route exact path="/" render={() => <Redirect to="/task/taskList" push />} />
-            <Route path="/" component={App} />
+            <Route exact path="/" render={() => <Redirect to="/hpc/task/taskList" push />} />
+            <Route path="/hpc" component={App} />
             <Route path="/404" component={NotFound} />
             <Route path="/login" component={Login} />
             <Route component={NotFound} />
