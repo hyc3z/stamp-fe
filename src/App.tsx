@@ -106,7 +106,7 @@ class App extends Component<AppProps> {
                             <Routes auth={auth} />
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>
-                            hpc管理系统 ©{new Date().getFullYear()}
+                            hpc管理系统 v0.1.0 ©{new Date().getFullYear()}
                         </Footer>
                     </Layout>
                 </Layout>
