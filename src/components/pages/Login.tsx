@@ -2,11 +2,13 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button /*Checkbox*/ } from 'antd';
 import { PwaInstaller } from '../widget';
 import { connectAlita } from 'redux-alita';
-import { RouteComponentProps } from 'react-router';
+import { Redirect, RouteComponentProps } from 'react-router';
 import { FormProps } from 'antd/lib/form';
+import axios from 'axios';
+// import { Route, Router } from 'react-router-dom';
 
 const FormItem = Form.Item;
 type LoginProps = {
@@ -31,16 +33,21 @@ class Login extends React.Component<LoginProps> {
     }
     handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        this.props.form!.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-                const { setAlitaState } = this.props;
-                if (values.userName === 'admin' && values.password === 'admin'){
-                    console.log("admin")
-                    setAlitaState({ funcName: 'admin', stateName: 'auth' });
-                }
+        this.props.form!.validateFields(async (err, values) => {
+            let un = values.userName
+            let pwd = values.password
+            let res = await axios.get(`http://localhost:3078/user/login?username=${un}&password=${pwd}`);
+            let msg = res && res.data && res.data.message
+            if(msg){
+                localStorage.setItem("hyc-stamp-jwt", msg);
+                localStorage.setItem("stamp-user-name",un );
+                this.props.history.push('/hpc/task/taskList');
+            } else {
+                alert("用户名或密码错误！")
             }
         });
+        
+        
     };
     gitHub = () => {
         window.location.href =
@@ -48,6 +55,9 @@ class Login extends React.Component<LoginProps> {
     };
     render() {
         const { getFieldDecorator } = this.props.form!;
+        if(localStorage.getItem("hyc-stamp-jwt")){
+            return <Redirect to={'/hpc/task/tasklist'}/>
+        }
         return (
             <div className="login">
                 <div className="login-form">

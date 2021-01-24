@@ -4,9 +4,9 @@
 import React from 'react';
 import { Row, Col, Card } from 'antd';
 import EchartsArea from './EchartsArea';
-import EchartsPie from './EchartsPie';
-import EchartsEffectScatter from './EchartsEffectScatter';
-import EchartsForce from './EchartsForce';
+// import EchartsPie from './EchartsPie';
+// import EchartsEffectScatter from './EchartsEffectScatter';
+// import EchartsForce from './EchartsForce';
 
 class Echarts extends React.Component {
     render() {

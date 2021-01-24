@@ -1,18 +1,20 @@
-/**
- * Created by 叶子 on 2017/8/13.
- */
+
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
 import routesConfig, { IFMenuBase, IFMenu } from './config';
 import queryString from 'query-string';
-
+// import App from '../App';
+// import NotFound from '../components/pages/NotFound';
+// import Login from '../components/pages/Login';
+// import AuthData from '../App'
 type CRouterProps = {
     auth: any;
 };
 
 export default class CRouter extends Component<CRouterProps> {
+
     requireAuth = (permission: any, component: React.ReactElement) => {
         const { auth } = this.props;
         const { permissions } = auth.data;
@@ -20,18 +22,22 @@ export default class CRouter extends Component<CRouterProps> {
         if (!permissions || !permissions.includes(permission)) return <Redirect to={'404'} />;
         return component;
     };
-    requireLogin = (component: React.ReactElement, permission: any) => {
-        const { auth } = this.props;
-        const { permissions } = auth.data;
-        if (process.env.NODE_ENV === 'production' && !permissions) {
+    requireLogin = (component: React.ReactElement) => {
+      
+        const permissions = () => {
+            return { data: localStorage.getItem("hyc-stamp-jwt")}
+        }
+        if (!permissions) {
             // 线上环境判断是否登录
             return <Redirect to={'/login'} />;
         }
-        return permission ? this.requireAuth(permission, component) : component;
+        return component;
     };
     render() {
         return (
+            
             <Switch>
+                
                 {Object.keys(routesConfig).map(key =>
                     routesConfig[key].map((r: IFMenu) => {
                         const route = (r: IFMenuBase) => {
@@ -66,7 +72,7 @@ export default class CRouter extends Component<CRouterProps> {
                                         );
                                         return r.login
                                             ? wrappedComponent
-                                            : this.requireLogin(wrappedComponent, r.auth);
+                                            : this.requireLogin(wrappedComponent);
                                     }}
                                 />
                             );
@@ -77,8 +83,8 @@ export default class CRouter extends Component<CRouterProps> {
                     })
                 )}
 
-                <Route render={() => <Redirect to="/404" />} />
             </Switch>
         );
     }
 }
+

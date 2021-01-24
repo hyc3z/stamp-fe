@@ -3,15 +3,15 @@
  */
 import React, { Component } from 'react';
 import screenfull from 'screenfull';
-import avater from '../style/imgs/b1.jpg';
+// import avater from '../style/imgs/b1.jpg';
 import SiderCustom from './SiderCustom';
-import { Menu, Icon, Layout, Badge, Popover } from 'antd';
+import { Menu, Icon, Layout,  Popover } from 'antd';
 import { gitOauthToken, gitOauthInfo } from '../axios';
 import { queryString } from '../utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { PwaInstaller } from './widget';
 import { connectAlita } from 'redux-alita';
-import { userInfo } from 'os';
+// import { userInfo } from 'os';
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -63,7 +63,8 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
         e.key === 'logout' && this.logout();
     };
     logout = () => {
-        localStorage.removeItem('user');
+        console.log("Removed Item.")
+        localStorage.removeItem('hyc-stamp-jwt');
         this.props.history.push('/login');
     };
     popoverHide = () => {
@@ -103,18 +104,10 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
                     <Menu.Item key="pwa">
                         <PwaInstaller />
                     </Menu.Item>
-                    {/* <Menu.Item key="full" onClick={this.screenFull}>
-                        <Icon type="arrows-alt" onClick={this.screenFull} />
-                    </Menu.Item>
-                    <Menu.Item key="1">
-                        <Badge count={25} overflowCount={10} style={{ marginLeft: 10 }}>
-                            <Icon type="notification" />
-                        </Badge>
-                    </Menu.Item> */}
                     <SubMenu
                         title={
                             <span className="avatar">
-                                <p>{userInfo}</p>
+                                <span>{localStorage.getItem('stamp-user-name')}</span>
                                 <i className="on bottom b-white" />
                             </span>
                         }
