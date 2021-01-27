@@ -7,10 +7,10 @@ import { ColumnProps } from 'antd/lib/table';
 import { Row, Col, Card } from 'antd';
 
 const columns: ColumnProps<any>[] = [
-    { title: '任务名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
-    { title: '运行状态', width: 100, dataIndex: 'state', key: 'state', fixed: 'left' },
-    { title: '运行时长', dataIndex: 'elapsed', key: '1' },
-    { title: '开始时间', dataIndex: 'start_time', key: '2' },
+    { title: '脚本名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
+    // { title: '运行状态', width: 100, dataIndex: 'state', key: 'state', fixed: 'left' },
+    // { title: '运行时长', dataIndex: 'elapsed', key: '1' },
+    { title: '大小', dataIndex: 'start_time', key: '2' },
     { title: '资源类型', dataIndex: 'res_type', key: '3' },
     { title: '资源数量', dataIndex: 'res_amount', key: '4' },
     // { title: 'Column 5', dataIndex: 'address', key: '5' },

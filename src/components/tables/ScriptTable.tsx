@@ -3,20 +3,20 @@
  */
 import React from 'react';
 import { Row, Col, Card } from 'antd';
-import FixedTable from './FixedTable';
+import FixedTable from './FixedTableScript';
 import ExpandedTable from './ExpandedTable';
 import EditableTable from './EditableTable';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 
-class AdvancedTables extends React.Component {
+class ScriptTables extends React.Component {
     render() {
         return (
             <div className="gutter-example">
-                <BreadcrumbCustom first="任务" second="任务列表" />
+                <BreadcrumbCustom first="脚本管理" second="脚本列表" />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Card title="任务列表" bordered={false}>
+                            <Card title="脚本列表" bordered={false}>
                                 <FixedTable />
                             </Card>
                         </div>
@@ -43,4 +43,4 @@ class AdvancedTables extends React.Component {
     }
 }
 
-export default AdvancedTables;
+export default ScriptTables;

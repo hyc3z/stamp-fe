@@ -1,6 +1,4 @@
-/**
- * Created by hao.cheng on 2017/4/26.
- */
+
 import React, { Component } from 'react';
 import { Row, Col, Card } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
@@ -104,11 +102,11 @@ class Wysiwyg extends Component {
         const { editorContent, editorState } = this.state;
         return (
             <div className="gutter-example button-demo">
-                <BreadcrumbCustom first="UI" second="富文本" />
+                <BreadcrumbCustom first="UI" second="脚本编辑" />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Card title="富文本编辑器" bordered={false}>
+                            <Card title="脚本编辑器" bordered={false}>
                                 <Editor
                                     editorState={editorState}
                                     toolbarClassName="home-toolbar"

@@ -7,6 +7,7 @@ import Loading from './widget/Loading';
 import BasicForm from './forms/BasicForm';
 import BasicTable from './tables/BasicTables';
 import AdvancedTable from './tables/AdvancedTables';
+import ScriptTable from './tables/ScriptTable';
 import AsynchronousTable from './tables/AsynchronousTable';
 import Echarts from './charts/Echarts';
 import Recharts from './charts/Recharts';
@@ -38,6 +39,7 @@ export default {
     BasicForm,
     BasicTable,
     AdvancedTable,
+    ScriptTable,
     AsynchronousTable,
     Echarts,
     Recharts,
