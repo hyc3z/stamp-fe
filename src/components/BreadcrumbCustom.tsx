@@ -17,7 +17,7 @@ class BreadcrumbCustom extends React.Component<BreadcrumbCustomProps> {
             <span>
                 <Breadcrumb style={{ margin: '12px 0' }}>
                     <Breadcrumb.Item>
-                        <Link to={'/app/dashboard/index'}>首页</Link>
+                        hpc管理系统
                     </Breadcrumb.Item>
                     {first}
                     {second}

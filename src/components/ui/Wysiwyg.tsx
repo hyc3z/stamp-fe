@@ -102,7 +102,7 @@ class Wysiwyg extends Component {
         const { editorContent, editorState } = this.state;
         return (
             <div className="gutter-example button-demo">
-                <BreadcrumbCustom first="UI" second="脚本编辑" />
+                <BreadcrumbCustom first="脚本编辑"  />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
@@ -121,7 +121,7 @@ class Wysiwyg extends Component {
                                         image: { uploadCallback: this.imageUploadCallBack },
                                     }}
                                     onContentStateChange={this.onEditorChange}
-                                    placeholder="请输入正文~~尝试@哦，有惊喜"
+                                    placeholder=""
                                     spellCheck
                                     onFocus={() => {
                                         console.log('focus');
@@ -165,7 +165,7 @@ class Wysiwyg extends Component {
                             </Card>
                         </div>
                     </Col>
-                    <Col className="gutter-row" md={8}>
+                    {/* <Col className="gutter-row" md={8}>
                         <Card title="同步转换HTML" bordered={false}>
                             <pre>{draftToHtml(editorContent)}</pre>
                         </Card>
@@ -183,7 +183,7 @@ class Wysiwyg extends Component {
                                 {JSON.stringify(editorContent)}
                             </pre>
                         </Card>
-                    </Col>
+                    </Col> */}
                 </Row>
             </div>
         );

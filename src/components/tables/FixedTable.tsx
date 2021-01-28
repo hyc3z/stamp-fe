@@ -5,6 +5,8 @@ import React from 'react';
 import { Table, Icon, Button } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { Row, Col, Card } from 'antd';
+import StopOutlined from '@ant-design/icons/StopOutlined'
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined'
 
 const columns: ColumnProps<any>[] = [
     { title: '任务名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
@@ -21,16 +23,17 @@ const columns: ColumnProps<any>[] = [
         title: '操作',
         key: 'operation',
         fixed: 'right',
-        width: 200,
+        width: 250,
         render: (text: any, record: any) => (
             <span>
-                <Row >
-                    <Col className="gutter-row">
-                        <Button>停止任务</Button>
+                <Row gutter={24}>
+                    <Col span={11}>
+                        <Button>
+                        <StopOutlined translate={"default"}/>停止任务</Button>
                     </Col>
-                    <Col className="gutter-row" >
+                    <Col span={11}>
                     <Button>
-                        任务详情
+                    <InfoCircleOutlined translate={"default"}/>任务详情
                     </Button>
                     </Col>
                 </Row>
