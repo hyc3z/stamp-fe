@@ -9,10 +9,10 @@ import StopOutlined from '@ant-design/icons/StopOutlined'
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined'
 
 const columns: ColumnProps<any>[] = [
-    { title: '任务名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
-    { title: '运行状态', width: 100, dataIndex: 'state', key: 'state', fixed: 'left' },
-    { title: '运行时长', dataIndex: 'elapsed', key: '1' },
-    { title: '开始时间', dataIndex: 'start_time', key: '2' },
+    { title: '脚本名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
+    // { title: '运行状态', width: 100, dataIndex: 'state', key: 'state', fixed: 'left' },
+    // { title: '运行时长', dataIndex: 'elapsed', key: '1' },
+    { title: '大小', dataIndex: 'start_time', key: '2' },
     { title: '资源类型', dataIndex: 'res_type', key: '3' },
     { title: '资源数量', dataIndex: 'res_amount', key: '4' },
     // { title: 'Column 5', dataIndex: 'address', key: '5' },
@@ -25,19 +25,14 @@ const columns: ColumnProps<any>[] = [
         fixed: 'right',
         width: 250,
         render: (text: any, record: any) => (
-            <span>
                 <Row gutter={24}>
-                    <Col span={11}>
-                        <Button>
-                        <StopOutlined translate={"default"}/>停止任务</Button>
-                    </Col>
+                    
                     <Col span={11}>
                     <Button>
-                    <InfoCircleOutlined translate={"default"}/>任务详情
+                    <InfoCircleOutlined translate={"default"}/>脚本详情
                     </Button>
                     </Col>
                 </Row>
-            </span>
         ),
     },
     

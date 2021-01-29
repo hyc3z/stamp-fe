@@ -1,6 +1,4 @@
-/**
- * Created by hao.cheng on 2017/4/26.
- */
+
 import React, { Component } from 'react';
 import { Row, Col, Card } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
@@ -104,11 +102,11 @@ class Wysiwyg extends Component {
         const { editorContent, editorState } = this.state;
         return (
             <div className="gutter-example button-demo">
-                <BreadcrumbCustom first="UI" second="富文本" />
+                <BreadcrumbCustom first="脚本编辑"  />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Card title="富文本编辑器" bordered={false}>
+                            <Card title="脚本编辑器" bordered={false}>
                                 <Editor
                                     editorState={editorState}
                                     toolbarClassName="home-toolbar"
@@ -123,7 +121,7 @@ class Wysiwyg extends Component {
                                         image: { uploadCallback: this.imageUploadCallBack },
                                     }}
                                     onContentStateChange={this.onEditorChange}
-                                    placeholder="请输入正文~~尝试@哦，有惊喜"
+                                    placeholder=""
                                     spellCheck
                                     onFocus={() => {
                                         console.log('focus');
@@ -167,7 +165,7 @@ class Wysiwyg extends Component {
                             </Card>
                         </div>
                     </Col>
-                    <Col className="gutter-row" md={8}>
+                    {/* <Col className="gutter-row" md={8}>
                         <Card title="同步转换HTML" bordered={false}>
                             <pre>{draftToHtml(editorContent)}</pre>
                         </Card>
@@ -185,7 +183,7 @@ class Wysiwyg extends Component {
                                 {JSON.stringify(editorContent)}
                             </pre>
                         </Card>
-                    </Col>
+                    </Col> */}
                 </Row>
             </div>
         );

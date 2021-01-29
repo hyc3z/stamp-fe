@@ -7,6 +7,7 @@ import Loading from './widget/Loading';
 import BasicForm from './forms/BasicForm';
 import BasicTable from './tables/BasicTables';
 import AdvancedTable from './tables/AdvancedTables';
+import ScriptTable from './tables/ScriptTable';
 import AsynchronousTable from './tables/AsynchronousTable';
 import Echarts from './charts/Echarts';
 import Recharts from './charts/Recharts';
@@ -27,7 +28,7 @@ import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
 import MapUi from './ui/map';
 import QueryParams from './extension/QueryParams';
-
+import MyFileBrowser from './filebrowser/FileBrowser'
 const WysiwygBundle = Loadable({
     // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -38,6 +39,8 @@ export default {
     BasicForm,
     BasicTable,
     AdvancedTable,
+    ScriptTable,
+    MyFileBrowser,
     AsynchronousTable,
     Echarts,
     Recharts,

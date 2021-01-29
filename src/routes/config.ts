@@ -32,17 +32,27 @@ const menus: {
         },
         {
             key: '/hpc/cluster',
-            title: '集群监控',
+            title: '集群管理',
             icon: 'area-chart',
             subs: [
-                { key: '/hpc/cluster/monitor', title: '监控', component: 'Echarts' },
+                { key: '/hpc/cluster/monitor', title: '集群监控', component: 'Echarts' },
             ]
         },
         {
+            key: '/hpc/files',
+            title: '文件管理',
+            icon: 'database',
+            component: 'MyFileBrowser'
+        },
+        {
             key: '/hpc/script',
-            title: '脚本管理',
+            title: '脚本编辑',
             icon: 'edit',
-
+            component: 'WysiwygBundle'
+            // subs: [
+            //     { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
+            //     { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' }
+            // ]
         },
         {
             key: '/hpc/info',

@@ -7,11 +7,14 @@ import EchartsArea from './EchartsArea';
 // import EchartsPie from './EchartsPie';
 // import EchartsEffectScatter from './EchartsEffectScatter';
 // import EchartsForce from './EchartsForce';
+import BreadcrumbCustom from '../BreadcrumbCustom';
 
 class Echarts extends React.Component {
     render() {
         return (
             <div className="gutter-example">
+                <BreadcrumbCustom first="集群管理" second="集群监控" />
+
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">

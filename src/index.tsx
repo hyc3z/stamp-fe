@@ -8,7 +8,10 @@ import { AlitaProvider, setConfig } from 'redux-alita';
 import './style/lib/animate.css';
 import './style/antd/index.less';
 import './style/index.less';
-
+import { setChonkyDefaults } from 'chonky';
+import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+// Somewhere in your `index.ts`:
+setChonkyDefaults({ iconComponent: ChonkyIconFA });
 setConfig(apis);
 // const render = Component => { // 增加react-hot-loader保持状态刷新操作，如果不需要可去掉并把下面注释的打开
 //     ReactDOM.render(

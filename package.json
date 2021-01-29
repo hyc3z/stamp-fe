@@ -4,6 +4,7 @@
     "private": true,
     "homepage": ".",
     "dependencies": {
+        "@ant-design/icons": "^4.4.0",
         "@babel/core": "7.6.0",
         "@babel/helper-compilation-targets": "^7.12.5",
         "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.3",
@@ -39,6 +40,8 @@
         "babel-preset-react-app": "^9.0.2",
         "camelcase": "^5.2.0",
         "case-sensitive-paths-webpack-plugin": "2.2.0",
+        "chonky": "^2.1.0",
+        "chonky-icon-fontawesome": "^2.1.0",
         "css-loader": "2.1.1",
         "dotenv": "6.2.0",
         "dotenv-expand": "5.1.0",
