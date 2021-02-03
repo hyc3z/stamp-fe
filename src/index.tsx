@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import Page from './Page';
 import * as apis from './axios';
+import Axios from 'axios';
 // import { AppContainer } from 'react-hot-loader';
 import { AlitaProvider, setConfig } from 'redux-alita';
 import './style/lib/animate.css';
@@ -13,6 +14,15 @@ import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 // Somewhere in your `index.ts`:
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 setConfig(apis);
+Axios.defaults.baseURL='http://localhost:3078/'
+Axios.interceptors.request.use(function (config) {
+    let token = localStorage.getItem('hyc-stamp-jwt');
+    if (token) {
+      config.headers['Authorization'] = "Bearer "+ token;
+    }
+    return config;
+  })
+
 // const render = Component => { // 增加react-hot-loader保持状态刷新操作，如果不需要可去掉并把下面注释的打开
 //     ReactDOM.render(
 //         <AppContainer>

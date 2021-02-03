@@ -46,13 +46,12 @@ const menus: {
         },
         {
             key: '/hpc/script',
-            title: '脚本编辑',
+            title: '脚本管理',
             icon: 'edit',
-            component: 'WysiwygBundle'
-            // subs: [
-            //     { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
-            //     { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' }
-            // ]
+            subs: [
+                { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
+                { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' }
+            ]
         },
         {
             key: '/hpc/info',

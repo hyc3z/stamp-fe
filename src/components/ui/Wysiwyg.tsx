@@ -6,7 +6,10 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import draftToMarkdown from 'draftjs-to-markdown';
-import { EditorState } from 'draft-js';
+import Draft, { EditorState } from 'draft-js';
+import {  ContentState, convertToRaw } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+
 
 const rawContentState = {
     entityMap: {
@@ -18,26 +21,8 @@ const rawContentState = {
     },
     blocks: [
         {
-            key: '9unl6',
-            text: '',
-            type: 'unstyled',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {},
-        },
-        {
-            key: '95kn',
-            text: ' ',
-            type: 'atomic',
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [{ offset: 0, length: 1, key: 0 }],
-            data: {},
-        },
-        {
             key: '7rjes',
-            text: '',
+            text: 'dedefe',
             type: 'unstyled',
             depth: 0,
             inlineStyleRanges: [],
@@ -51,12 +36,27 @@ type WysiwygState = {
     contentState: any;
     editorState: EditorState | undefined;
 };
-class Wysiwyg extends Component {
-    state: WysiwygState = {
-        editorContent: undefined,
-        contentState: rawContentState,
-        editorState: undefined,
-    };
+class Wysiwyg extends Component<{},WysiwygState> {
+
+    constructor(props: any) {
+        super(props)
+        const currentScript = localStorage.getItem("stamp-script-edit")
+        let blocksFromHtml = htmlToDraft("");
+        let msg = ""
+        if (currentScript) {
+            const jsonObj = JSON.parse(currentScript)
+            msg = jsonObj["message"]
+            blocksFromHtml = htmlToDraft(msg)
+        }
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        const editorState = EditorState.createWithContent(contentState);
+        this.state = {
+            editorContent: msg,
+            contentState: convertToRaw(contentState),
+            editorState: editorState,
+        }
+    }
 
     onEditorChange = (editorContent: any) => {
         this.setState({
@@ -71,7 +71,9 @@ class Wysiwyg extends Component {
     };
 
     onContentStateChange = (contentState: any) => {
-        console.log('contentState', contentState);
+        this.setState({
+            contentState,
+        });
     };
 
     onEditorStateChange = (editorState: any) => {
@@ -99,7 +101,7 @@ class Wysiwyg extends Component {
         });
 
     render() {
-        const { editorContent, editorState } = this.state;
+        
         return (
             <div className="gutter-example button-demo">
                 <BreadcrumbCustom first="脚本编辑"  />
@@ -108,7 +110,8 @@ class Wysiwyg extends Component {
                         <div className="gutter-box">
                             <Card title="脚本编辑器" bordered={false}>
                                 <Editor
-                                    editorState={editorState}
+                                    contentState={this.state.contentState}
+                                    editorState={this.state.editorState}
                                     toolbarClassName="home-toolbar"
                                     wrapperClassName="home-wrapper"
                                     editorClassName="home-editor"
@@ -124,13 +127,13 @@ class Wysiwyg extends Component {
                                     placeholder=""
                                     spellCheck
                                     onFocus={() => {
-                                        console.log('focus');
+                                        // console.log('focus');
                                     }}
                                     onBlur={() => {
-                                        console.log('blur');
+                                        // console.log('blur');
                                     }}
                                     onTab={() => {
-                                        console.log('tab');
+                                        // console.log('tab');
                                         return true;
                                     }}
                                     localization={{

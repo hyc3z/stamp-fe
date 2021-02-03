@@ -6,7 +6,7 @@ import App from './App';
 
 
 const authData = () => {
-    console.log("Validating jwt...", localStorage.getItem("hyc-stamp-jwt"))
+    // console.log("Validating jwt...", localStorage.getItem("hyc-stamp-jwt"))
     return localStorage.getItem("hyc-stamp-jwt")
 }
 
@@ -28,7 +28,7 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({
     <Route
       {...routeProps}
       render={(props) =>
-        isSignedIn ? <Redirect to={'/hpc/task/taskList'} /> : <Redirect to={'/login'} />
+        isSignedIn ? Component : <Redirect to={'/login'} />
       }
     />
   );
@@ -43,6 +43,6 @@ export default () => (
         <Route path="/404" component={NotFound} />
         <Route path="/login" component={Login} />
         <Route path="/hpc" component={App} />
-        <Route component={NotFound} />  
+        {/* <Route component={NotFound} />   */}
     </Router>
 );
