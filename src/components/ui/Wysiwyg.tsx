@@ -1,6 +1,6 @@
 
 import React, { Component, useContext, useState } from 'react';
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, Input, Form, Button, Icon, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import { ContentBlock, Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -11,6 +11,8 @@ import {  ContentState, convertToRaw } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import WysiwygContext from '../../context/WysiwigContext';
 import { useHistory } from 'react-router-dom'
+import FormItem from 'antd/lib/form/FormItem';
+import Axios from 'axios';
 
 const rawContentState = {
     entityMap: {
@@ -39,7 +41,7 @@ type WysiwygState = {
 };
 
 export default function Wysiwyg () {
-    const {wstate, changeState} = useContext(WysiwygContext)
+    const {wstate, changeState, changeScriptPath} = useContext(WysiwygContext)
     let history = useHistory();
 
     const onEditorChange = (editorContent: any) => {
@@ -84,7 +86,24 @@ export default function Wysiwyg () {
             });
         });
 
-    
+    const handleSaveScript = (e: any) => {
+        e.preventDefault()
+        Axios({
+            method: 'POST',
+            url: 'file/editScript',
+            data: '',
+            headers: { 
+                "Content-Type": "multipart/form-data",
+            }
+        }).then(({data}) => {
+            message.success("上传成功")
+            console.log(data)
+        }).catch((err) =>{
+            message.error("上传失败")
+            console.log(err)
+        }).finally(() =>{
+        })
+    }
         
         return (
             
@@ -97,16 +116,17 @@ export default function Wysiwyg () {
                                 <Editor
                                     contentState={wstate.contentState}
                                     editorState={wstate.editorState}
+                                    toolbarHidden={true}
                                     toolbarClassName="home-toolbar"
                                     wrapperClassName="home-wrapper"
                                     editorClassName="home-editor"
                                     onEditorStateChange={onEditorStateChange}
                                     toolbar={{
-                                        history: { inDropdown: true },
-                                        inline: { inDropdown: false },
-                                        list: { inDropdown: true },
-                                        textAlign: { inDropdown: true },
-                                        image: { uploadCallback: imageUploadCallBack },
+                                        // history: { inDropdown: true },
+                                        // inline: { inDropdown: false },
+                                        // list: { inDropdown: true },
+                                        // textAlign: { inDropdown: true },
+                                        // image: { uploadCallback: imageUploadCallBack },
                                     }}
                                     onContentStateChange={onEditorChange}
                                     placeholder=""
@@ -145,7 +165,7 @@ export default function Wysiwyg () {
                             </Card>
                         </div>
                     </Col>
-                    <Col className="gutter-row" md={8}>
+                    {/* <Col className="gutter-row" md={8}>
                         <Card title="同步转换HTML" bordered={false}>
                             <pre>{draftToHtml(wstate.editorContent)}</pre>
                         </Card>
@@ -163,8 +183,34 @@ export default function Wysiwyg () {
                                 {JSON.stringify(wstate.editorContent)}
                             </pre>
                         </Card>
-                    </Col>
+                    </Col> */}
                 </Row>
+                <Card title="保存脚本" bordered={false}>
+                    <Row>
+                    <span>
+                        <Form  
+                        name="customized_form_controls"
+                        layout="inline"
+                        onSubmit={handleSaveScript}
+                      >
+                            
+                       
+                    <FormItem  label="保存名称" >
+                        <Input
+                            prefix={<Icon type="book" style={{ fontSize: 13 }} />}
+                            value={wstate.scriptPath}
+                        />
+                    </FormItem>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            保存
+                        </Button>
+                    </Form.Item>
+                    </Form>
+                    </span>
+                    </Row>
+                </Card>
+                
             </div>
             
         );

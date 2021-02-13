@@ -54,11 +54,12 @@ export default function CRouter () {
         return {
             editorContent: msg,
             contentState: convertToRaw(contentState),
-            editorState: editorState
+            editorState: editorState,
+            scriptPath: ""
         }
     }
 
-    function changeStateWithString(str: string) {
+    function changeStateWithString(str: string, path?: string) {
         let blocksFromHtml = htmlToDraft(str);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
@@ -66,11 +67,17 @@ export default function CRouter () {
         setState({
             editorContent: str,
             contentState: convertToRaw(contentState),
-            editorState: editorState
+            editorState: editorState,
+            scriptPath: path || ""
         })
     }
     
-   
+    function changeScriptPath(path: string) {
+        const curstate = {...wstate}
+        curstate.scriptPath = path
+        setState(curstate)
+    }
+
     function changeState (state: any){
         setState(state) 
     }
@@ -104,7 +111,7 @@ export default function CRouter () {
     }
    
         return (
-            <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString}}>
+            <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString, changeScriptPath}}>
             <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList}}>
 
             <Switch>

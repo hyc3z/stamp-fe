@@ -20,6 +20,8 @@ import ModalForm from './ModalForm';
 import HorizontalForm from './HorizontalForm';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import { FormProps } from 'antd/lib/form';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -70,7 +72,7 @@ const residences = [
 
 type BasicFormProps = {} & FormProps;
 
-class BasicForms extends Component<BasicFormProps> {
+class BasicForms extends Component<BasicFormProps & RouteComponentProps> {
     state = {
         confirmDirty: false,
     };
@@ -142,6 +144,7 @@ class BasicForms extends Component<BasicFormProps> {
                             <Card title="任务创建" bordered={false}>
                                 <Form onSubmit={this.handleSubmit}>
                                     <FormItem {...formItemLayout} label="名称" hasFeedback>
+                                    <Col span={8}>
                                         {getFieldDecorator('task_name', {
                                             rules: [
                                                 {
@@ -154,6 +157,7 @@ class BasicForms extends Component<BasicFormProps> {
                                                 },
                                             ],
                                         })(<Input />)}
+                                        </Col>
                                     </FormItem>
                                     {/* <FormItem {...formItemLayout} label="密码" hasFeedback>
                                         {getFieldDecorator('password', {
@@ -187,7 +191,7 @@ class BasicForms extends Component<BasicFormProps> {
                                         )}
                                     </FormItem> */}
                                     
-                                    <FormItem {...formItemLayout} label="资源类型">
+                                    {/* <FormItem {...formItemLayout} label="资源类型">
                                         {getFieldDecorator('res_type', {
                                             initialValue: ['CPU'],
                         
@@ -215,12 +219,19 @@ class BasicForms extends Component<BasicFormProps> {
                                                 },
                                             ],
                                         })(<Input />)}
-                                    </FormItem>
+                                    </FormItem> */}
                                     <FormItem {...formItemLayout} label="任务脚本">
+                                        <Col span={8}>
                                         {getFieldDecorator('task_script', {
                                             initialValue: [''],
                         
                                         })(<Cascader options={taskScript} />)}
+                                        </Col>
+                                        <Col span={2} offset={1}>
+                                        <Button onClick={() => {this.props.history.push("/hpc/files")}} size="default">
+                                            上传脚本
+                                        </Button>
+                                        </Col>
                                     </FormItem>
                                     {/* <FormItem
                                         {...formItemLayout}
@@ -290,6 +301,6 @@ class BasicForms extends Component<BasicFormProps> {
     }
 }
 
-const BasicForm = Form.create()(BasicForms);
+const BasicForm = Form.create()(withRouter(BasicForms));
 
 export default BasicForm;

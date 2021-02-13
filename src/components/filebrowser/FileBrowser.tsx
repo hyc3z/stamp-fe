@@ -46,7 +46,7 @@ function MyFileBrowser (){
             {name: 'download_program',text: '下载程序'},
         ]
     }
-    const {wstate, changeState, changeStateWithString} = useContext(WysiwygContext)
+    const {wstate, changeState, changeStateWithString, changeScriptPath} = useContext(WysiwygContext)
     const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList} = useContext(FileContext)
 
     // customized FB menu action devExtreme
@@ -64,7 +64,7 @@ function MyFileBrowser (){
             const path = item.path
             const sd = await getscriptData(path)
             history.push('/hpc/script/edit')
-            changeStateWithString(sd["message"])
+            changeStateWithString(sd["message"], path)
         }
     }
 
