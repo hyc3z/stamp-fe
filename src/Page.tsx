@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Route, Redirect, RouteComponentProps } from 'r
 import NotFound from './components/pages/NotFound';
 import Login from './components/pages/Login';
 import App from './App';
+import Axios from 'axios';
 
 
-const authData = () => {
+const authData = async () => {
     // console.log("Validating jwt...", localStorage.getItem("hyc-stamp-jwt"))
-    return localStorage.getItem("hyc-stamp-jwt")
+    const res = await Axios.get("/user/validate")
+    return res.data === "true"
 }
 
 interface PrivateRouteProps {
@@ -39,7 +41,7 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({
 export default () => (
     
     <Router>
-        <PrivateRoute path = "/" render={() => <Redirect to = '/hpc/task/taskList' />} />
+        <Route path = "/" render={() => <Redirect to = '/login' />} />
         <Route path="/404" component={NotFound} />
         <Route path="/login" component={Login} />
         <Route path="/hpc" component={App} />

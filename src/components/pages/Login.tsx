@@ -8,6 +8,7 @@ import { connectAlita } from 'redux-alita';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { FormProps } from 'antd/lib/form';
 import axios from 'axios';
+import Axios from 'axios';
 // import { Route, Router } from 'react-router-dom';
 
 const FormItem = Form.Item;
@@ -36,7 +37,12 @@ class Login extends React.Component<LoginProps> {
         this.props.form!.validateFields(async (err, values) => {
             let un = values.userName
             let pwd = values.password
-            let res = await axios.get(`http://localhost:3078/user/login?username=${un}&password=${pwd}`);
+            let res = await axios.get(`/user/login`, {
+                headers : {
+                    "Stamp_oauth_username" : un,
+                    "Stamp_oauth_pwd": pwd
+                }
+            });
             let msg = res && res.data && res.data.message
             if(msg){
                 localStorage.setItem("hyc-stamp-jwt", msg);
@@ -56,7 +62,13 @@ class Login extends React.Component<LoginProps> {
     render() {
         const { getFieldDecorator } = this.props.form!;
         if(localStorage.getItem("hyc-stamp-jwt")){
-            return <Redirect to={'/hpc/task/tasklist'}/>
+            const permissions = async () => {
+                const res = await Axios.get("/user/validate")
+                return res.data === "true"
+            }
+            if( permissions()){
+                return <Redirect to={'/hpc/task/tasklist'}/>
+            }
         }
         return (
             <div className="login">

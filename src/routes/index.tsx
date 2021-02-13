@@ -1,31 +1,33 @@
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
 import routesConfig, { IFMenuBase, IFMenu } from './config';
 import queryString from 'query-string';
+import Axios from 'axios';
+import WysiwygContext, {WysiwygState} from '../context/WysiwigContext'
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
+import draftToMarkdown from 'draftjs-to-markdown';
+import Draft, { EditorState } from 'draft-js';
+import {  ContentState, convertToRaw } from 'draft-js';
+import FileContext, { FileState } from '../context/FileContext';
+
 // import App from '../App';
 // import NotFound from '../components/pages/NotFound';
 // import Login from '../components/pages/Login';
 // import AuthData from '../App'
-type CRouterProps = {
-    auth: any;
-};
 
-export default class CRouter extends Component<CRouterProps> {
 
-    requireAuth = (permission: any, component: React.ReactElement) => {
-        const { auth } = this.props;
-        const { permissions } = auth.data;
-        // const { auth } = store.getState().httpData;
-        if (!permissions || !permissions.includes(permission)) return <Redirect to={'404'} />;
-        return component;
-    };
-    requireLogin = (component: React.ReactElement) => {
+export default function CRouter () {
+    
+    
+    const requireLogin = (component: React.ReactElement) => {
       
-        const permissions = () => {
-            return { data: localStorage.getItem("hyc-stamp-jwt")}
+        const permissions = async () => {
+            const res = await Axios.get("/user/validate")
+            return res.data === "true"
         }
         if (!permissions) {
             // 线上环境判断是否登录
@@ -33,9 +35,78 @@ export default class CRouter extends Component<CRouterProps> {
         }
         return component;
     };
-    render() {
+    
+    const initstate = initWysiwygState()
+    const initFileState: FileState = {
+        fileList: [],
+        programs: {},
+        scripts: {},
+        initialized: false
+    }
+    const[wstate, setState] = useState(initstate)
+    const[fstate, setFileState] = useState(initFileState)
+    function initWysiwygState() {
+        let msg = ""
+        let blocksFromHtml = htmlToDraft(msg);
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        const editorState = EditorState.createWithContent(contentState);
+        return {
+            editorContent: msg,
+            contentState: convertToRaw(contentState),
+            editorState: editorState
+        }
+    }
+
+    function changeStateWithString(str: string) {
+        let blocksFromHtml = htmlToDraft(str);
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        const editorState = EditorState.createWithContent(contentState);
+        setState({
+            editorContent: str,
+            contentState: convertToRaw(contentState),
+            editorState: editorState
+        })
+    }
+    
+   
+    function changeState (state: any){
+        setState(state) 
+    }
+
+    function changeProgramList(list: any) {
+        const curstate = {...fstate}
+        curstate.programs = {...list}
+        setFileState(curstate)
+    }
+
+    function changeFileList(list: any) {
+        const curstate = {...fstate}
+        curstate.fileList = list
+        setFileState(curstate)
+    }
+
+    function changeScriptList(list: any) {
+        const curstate = {...fstate}
+        curstate.scripts = list
+        setFileState(curstate)
+    }
+
+    function changeProgramScriptList(programs: any, script: any, init: boolean) {
+        const curstate = {...fstate}
+        curstate.scripts = script
+        curstate.programs = programs
+        if(init) {
+            curstate.initialized = true
+        }
+        setFileState(curstate)
+    }
+   
         return (
-            
+            <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString}}>
+            <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList}}>
+
             <Switch>
                 
                 {Object.keys(routesConfig).map(key =>
@@ -70,9 +141,7 @@ export default class CRouter extends Component<CRouterProps> {
                                                 <Component {...merge} />
                                             </DocumentTitle>
                                         );
-                                        return r.login
-                                            ? wrappedComponent
-                                            : this.requireLogin(wrappedComponent);
+                                        return requireLogin(wrappedComponent);
                                     }}
                                 />
                             );
@@ -84,7 +153,10 @@ export default class CRouter extends Component<CRouterProps> {
                 )}
 
             </Switch>
+            </FileContext.Provider>
+            </WysiwygContext.Provider>
+                
+            
         );
-    }
 }
 

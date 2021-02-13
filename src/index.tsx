@@ -14,7 +14,7 @@ import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 // Somewhere in your `index.ts`:
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 setConfig(apis);
-Axios.defaults.baseURL='http://localhost:3078/'
+Axios.defaults.baseURL='http://192.168.1.2:3078/'
 Axios.interceptors.request.use(function (config) {
     let token = localStorage.getItem('hyc-stamp-jwt');
     if (token) {

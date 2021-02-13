@@ -1,6 +1,6 @@
 import { FileActionHandler, ChonkyActions,FullFileBrowser } from 'chonky';
 // import { VFSBrowser } from './VFSBrowser'
-import React from 'react';
+import React, { useContext } from 'react';
 import Axios from 'axios';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import { Row, Col, Card, Form, Upload, Button, Icon, message } from 'antd';
@@ -10,43 +10,51 @@ import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 import FileManager from 'devextreme-react/file-manager'
 import contextMenu from 'devextreme-react/context-menu';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
 import Wysiwyg from '../ui/Wysiwyg'
-interface FBState{
-    programs: {},
-    scripts: {},
-} 
-class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
+import WysiwygContext from '../../context/WysiwigContext';
+import FileContext from '../../context/FileContext';
+import { useHistory } from 'react-router-dom'
+// import { withRouter, RouteComponentProps } from 'react-router-dom';
+
+
+function MyFileBrowser (){
+
+    let history = useHistory();
     // for Chonky
-    files = [
+    const files = [
         {id: 'dir_script', name: '脚本文件夹', isDir: true, openable: true},
         {id: 'dir_exec', name: '程序文件夹', isDir: true, openable: true},
     ];
-    folderChainProgram = [
+    const folderChainProgram = [
         { id: 'fcp', name: '程序文件' },
     ];
-    folderChainScript = [
+    const folderChainScript = [
         { id: 'fcs', name: '脚本文件' },
     ];
     // ------
     // customized FB menu devExtreme
-    scriptMenu = {
+    
+    const scriptMenu = {
         items: [
             {name: 'edit_script', text: '编辑脚本'},
             {name: 'download_script', text: '下载脚本'},
+            {name: 'create_task_via_script', text: '创建任务'}
         ]
     }
-    programMenu = {
+    const programMenu = {
         items:[
             {name: 'download_program',text: '下载程序'},
         ]
     }
+    const {wstate, changeState, changeStateWithString} = useContext(WysiwygContext)
+    const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList} = useContext(FileContext)
+
     // customized FB menu action devExtreme
-    handleClickProgram = (data: any) => {
+    const handleClickProgram = (data: any) => {
         console.log(data)
     }
 
-    handleClickScript = async (data: any) => {
+    const handleClickScript = async (data: any) => {
         if(data.itemData.text == "编辑脚本") {
             const item = data.fileSystemItem
             if(item.isDirectory) {
@@ -54,51 +62,40 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
                 return
             }
             const path = item.path
-            const sd = await this.getscriptData(path)
-            localStorage.setItem("stamp-script-edit", JSON.stringify(sd))
-            localStorage.setItem("stamp-edit-path", path)
-
-            this.props.history.push('/hpc/script/edit')
+            const sd = await getscriptData(path)
+            history.push('/hpc/script/edit')
+            changeStateWithString(sd["message"])
         }
     }
 
-    fileList:any[] = [];
-    constructor(props: any){
-        super(props)
-        this.state = {
-            programs: {},
-            scripts: {},
-        }
-        this.updateProgramfiles()
-        this.updateScriptfiles()
-    }
-    getscriptData = (path: string) => {
+    
+    const getscriptData = (path: string) => {
         return Axios.get("/file/getScript/", {params : {
             "path": `${path}`,
         }
     }).then(data => {return data.data})
     }
-    handleAction: FileActionHandler = (data) => {
-        if (data.id === ChonkyActions.UploadFiles.id) {
-            console.log(data)
-        } 
-    };
-    updateProgramfiles = async () => {
-        await Axios.get("/file/program").then(data => {this.setState({programs: data.data})})
+    
+    const updateProgramfiles = async () => {
+        await Axios.get("/file/program").then(data => {return changeProgramList(data.data)})
     }
-    updateScriptfiles = async () => {
-        await Axios.get("/file/script").then(data => {this.setState({scripts: data.data})})
+    const updateScriptfiles = async () => {
+        await Axios.get("/file/script").then(data => {return changeScriptList(data.data)})
     }
-    handleFileChange = ({file, fileList}: {file:any, fileList:any}) => { //处理文件change，保证用户选择的文件只有一个
+
+    const updateFiles = async () => {
+        
+        const p = await Axios.get("/file/program").then(data => {return data.data})
+        const s = await Axios.get("/file/script").then(data => {return data.data})
+        return changeProgramScriptList(p, s, true);
+    }
+
+    const handleFileChange = ({file, fileList}: {file:any, fileList:any}) => { //处理文件change，保证用户选择的文件只有一个
         console.log("ckpt",file,fileList)
-        this.fileList = fileList.length? [fileList[fileList.length - 1]] : []
+        fileList = fileList.length? [fileList[fileList.length - 1]] : []
     }
     
-    myFileActions = [
-        ChonkyActions.DownloadFiles,
-    ];
-
-    handleUploadProgram = (data:any) => {
+    const handleUploadProgram = (data:any) => {
      
         const formData = new FormData()
         formData.append('file', data.file)
@@ -113,7 +110,7 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
         }).then(({data}) => {
             message.success("上传成功")
             console.log(data)
-            this.updateProgramfiles()
+            updateProgramfiles()
         }).catch((err) =>{
             message.error("上传失败")
             console.log(err)
@@ -121,7 +118,7 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
         })
     }
 
-    handleUploadScript = (data:any) => {
+    const handleUploadScript = (data:any) => {
         
         const formData = new FormData()
         formData.append('file', data.file)
@@ -138,7 +135,7 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
         }).then(({data}) => {
             message.success("上传成功")
             console.log(data)
-            this.updateScriptfiles()
+            updateScriptfiles()
         }).catch((err) =>{
             message.error("上传失败")
             console.log(err)
@@ -146,7 +143,9 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
         })
     }
   
-    render() {
+    if(!fstate.initialized){
+        updateFiles()
+    }
         return (
             <div>
                 <BreadcrumbCustom first="文件管理" />
@@ -154,10 +153,10 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
                     <Row gutter={24}>
                     <Col span={12}>
                     {/* <FullFileBrowser folderChain={this.folderChainProgram} files={this.state.programs} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
-                    <FileManager rootFolderName={"程序文件夹"} contextMenu={this.programMenu} onContextMenuItemClick={this.handleClickProgram} fileSystemProvider={this.state.programs}/>
+                    <FileManager rootFolderName={"程序文件夹"} contextMenu={programMenu} onContextMenuItemClick={handleClickProgram} fileSystemProvider={fstate.programs}/>
                         </Col>
                         <Col span={12}>
-                    <FileManager rootFolderName={"脚本文件夹"} contextMenu={this.scriptMenu} onContextMenuItemClick={this.handleClickScript} fileSystemProvider={this.state.scripts}/>
+                    <FileManager rootFolderName={"脚本文件夹"} contextMenu={scriptMenu} onContextMenuItemClick={handleClickScript} fileSystemProvider={fstate.scripts}/>
                     {/* <FullFileBrowser folderChain={this.folderChainScript} files={this.state.scripts} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
                         </Col>
                     </Row>
@@ -167,7 +166,7 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
                         <Col span={7}>
                         <Upload
                             showUploadList = {false}
-                            customRequest = {this.handleUploadProgram}
+                            customRequest = {handleUploadProgram}
                         >
                         <Button >
                             <CloudUploadOutlined translate={"default"}/>上传程序
@@ -177,8 +176,8 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
                     <Col span={5}></Col>
                     <Col span={7}>
                     <Upload
-                            showUploadList = {false}
-                        customRequest = {this.handleUploadScript}
+                        showUploadList = {false}
+                        customRequest = {handleUploadScript}
                     >
                       <Button>
                         <CloudUploadOutlined translate={"default"}/>上传脚本
@@ -186,14 +185,9 @@ class MyFileBrowser extends React.Component<RouteComponentProps, FBState>{
                     </Upload>
                     </Col>
                         </Row>
-                    
-                  
                 </Card>
-                
             </div>
-                    
         )
-    }
 };
 
-export default withRouter(MyFileBrowser);
+export default MyFileBrowser;

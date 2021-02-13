@@ -1,15 +1,16 @@
 
-import React, { Component } from 'react';
+import React, { Component, useContext, useState } from 'react';
 import { Row, Col, Card } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import { Editor } from 'react-draft-wysiwyg';
+import { ContentBlock, Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import draftToMarkdown from 'draftjs-to-markdown';
 import Draft, { EditorState } from 'draft-js';
 import {  ContentState, convertToRaw } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
-
+import WysiwygContext from '../../context/WysiwigContext';
+import { useHistory } from 'react-router-dom'
 
 const rawContentState = {
     entityMap: {
@@ -36,53 +37,36 @@ type WysiwygState = {
     contentState: any;
     editorState: EditorState | undefined;
 };
-class Wysiwyg extends Component<{},WysiwygState> {
 
-    constructor(props: any) {
-        super(props)
-        const currentScript = localStorage.getItem("stamp-script-edit")
-        let blocksFromHtml = htmlToDraft("");
-        let msg = ""
-        if (currentScript) {
-            const jsonObj = JSON.parse(currentScript)
-            msg = jsonObj["message"]
-            blocksFromHtml = htmlToDraft(msg)
-        }
-        const { contentBlocks, entityMap } = blocksFromHtml;
-        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-        const editorState = EditorState.createWithContent(contentState);
-        this.state = {
-            editorContent: msg,
-            contentState: convertToRaw(contentState),
-            editorState: editorState,
-        }
-    }
+export default function Wysiwyg () {
+    const {wstate, changeState} = useContext(WysiwygContext)
+    let history = useHistory();
 
-    onEditorChange = (editorContent: any) => {
-        this.setState({
-            editorContent,
-        });
+    const onEditorChange = (editorContent: any) => {
+       const curState = {...wstate}
+       curState.editorContent = editorContent
+       changeState(curState)
     };
 
-    clearContent = () => {
-        this.setState({
-            contentState: '',
-        });
+    const clearContent = () => {
+        const curState = {...wstate}
+        curState.contentState = ""
+        changeState(curState)
     };
 
-    onContentStateChange = (contentState: any) => {
-        this.setState({
-            contentState,
-        });
+    const onContentStateChange = (contentState: any) => {
+        const curState = {...wstate}
+        curState.contentState = contentState
+        changeState(curState)
     };
 
-    onEditorStateChange = (editorState: any) => {
-        this.setState({
-            editorState,
-        });
+    const onEditorStateChange = (editorState: any) => {
+        const curState = {...wstate}
+        curState.editorState = editorState
+        changeState(curState)
     };
 
-    imageUploadCallBack = (file: any) =>
+    const imageUploadCallBack = (file: any) =>
         new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest(); // eslint-disable-line no-undef
             xhr.open('POST', 'https://api.imgur.com/3/image');
@@ -100,30 +84,31 @@ class Wysiwyg extends Component<{},WysiwygState> {
             });
         });
 
-    render() {
+    
         
         return (
-            <div className="gutter-example button-demo">
+            
+<div className="gutter-example button-demo">
                 <BreadcrumbCustom first="脚本编辑"  />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
                             <Card title="脚本编辑器" bordered={false}>
                                 <Editor
-                                    contentState={this.state.contentState}
-                                    editorState={this.state.editorState}
+                                    contentState={wstate.contentState}
+                                    editorState={wstate.editorState}
                                     toolbarClassName="home-toolbar"
                                     wrapperClassName="home-wrapper"
                                     editorClassName="home-editor"
-                                    onEditorStateChange={this.onEditorStateChange}
+                                    onEditorStateChange={onEditorStateChange}
                                     toolbar={{
                                         history: { inDropdown: true },
                                         inline: { inDropdown: false },
                                         list: { inDropdown: true },
                                         textAlign: { inDropdown: true },
-                                        image: { uploadCallback: this.imageUploadCallBack },
+                                        image: { uploadCallback: imageUploadCallBack },
                                     }}
-                                    onContentStateChange={this.onEditorChange}
+                                    onContentStateChange={onEditorChange}
                                     placeholder=""
                                     spellCheck
                                     onFocus={() => {
@@ -142,19 +127,11 @@ class Wysiwyg extends Component<{},WysiwygState> {
                                     }}
                                     mention={{
                                         separator: ' ',
-                                        trigger: '@',
+                                        trigger: '#',
                                         caseSensitive: true,
                                         suggestions: [
-                                            { text: 'A', value: 'AB', url: 'href-a' },
-                                            { text: 'AB', value: 'ABC', url: 'href-ab' },
-                                            { text: 'ABC', value: 'ABCD', url: 'href-abc' },
-                                            { text: 'ABCD', value: 'ABCDDDD', url: 'href-abcd' },
-                                            { text: 'ABCDE', value: 'ABCDE', url: 'href-abcde' },
-                                            { text: 'ABCDEF', value: 'ABCDEF', url: 'href-abcdef' },
                                             {
-                                                text: 'ABCDEFG',
-                                                value: 'ABCDEFG',
-                                                url: 'href-abcdefg',
+                                                text: 'SBATCH',
                                             },
                                         ],
                                     }}
@@ -168,29 +145,28 @@ class Wysiwyg extends Component<{},WysiwygState> {
                             </Card>
                         </div>
                     </Col>
-                    {/* <Col className="gutter-row" md={8}>
+                    <Col className="gutter-row" md={8}>
                         <Card title="同步转换HTML" bordered={false}>
-                            <pre>{draftToHtml(editorContent)}</pre>
+                            <pre>{draftToHtml(wstate.editorContent)}</pre>
                         </Card>
                     </Col>
                     <Col className="gutter-row" md={8}>
                         <Card title="同步转换MarkDown" bordered={false}>
                             <pre style={{ whiteSpace: 'pre-wrap' }}>
-                                {draftToMarkdown(editorContent)}
+                                {draftToMarkdown(wstate.editorContent)}
                             </pre>
                         </Card>
                     </Col>
                     <Col className="gutter-row" md={8}>
                         <Card title="同步转换JSON" bordered={false}>
                             <pre style={{ whiteSpace: 'normal' }}>
-                                {JSON.stringify(editorContent)}
+                                {JSON.stringify(wstate.editorContent)}
                             </pre>
                         </Card>
-                    </Col> */}
+                    </Col>
                 </Row>
             </div>
+            
         );
-    }
 }
 
-export default Wysiwyg;

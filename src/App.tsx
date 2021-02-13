@@ -103,7 +103,7 @@ class App extends Component<AppProps> {
                             user={auth.data || {}}
                         />
                         <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
-                            <Routes auth={auth} />
+                            <Routes />
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>
                             hpc管理系统 v0.1.0 ©{new Date().getFullYear()}

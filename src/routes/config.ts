@@ -1,3 +1,5 @@
+import Axios from "axios";
+
 export interface IFMenuBase {
     key: string;
     title: string;
@@ -49,7 +51,7 @@ const menus: {
             title: '脚本管理',
             icon: 'edit',
             subs: [
-                { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
+                // { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
                 { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' }
             ]
         },
@@ -58,7 +60,8 @@ const menus: {
             title: '操作说明',
             icon: 'search',
             
-        }
+        },
+        
         
         
         //     key: '/app/ui',
