@@ -39,8 +39,8 @@ export default function CRouter () {
     const initstate = initWysiwygState()
     const initFileState: FileState = {
         fileList: [],
-        programs: {},
-        scripts: {},
+        programs: [],
+        scripts: [],
         initialized: false
     }
     const[wstate, setState] = useState(initstate)
@@ -109,10 +109,15 @@ export default function CRouter () {
         }
         setFileState(curstate)
     }
-   
+    
+    function refreshFileBrowser() {
+        const curstate = {...fstate}
+        curstate.initialized = false
+        setFileState(curstate)
+    }
         return (
             <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString, changeScriptPath}}>
-            <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList}}>
+            <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser}}>
 
             <Switch>
                 

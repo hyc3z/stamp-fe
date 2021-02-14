@@ -1,7 +1,7 @@
 /**
  * Created by hao.cheng on 2017/4/13.
  */
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import {
     Card,
     Form,
@@ -20,7 +20,10 @@ import ModalForm from './ModalForm';
 import HorizontalForm from './HorizontalForm';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import { FormProps } from 'antd/lib/form';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
+import FileContext from '../../context/FileContext';
+import { Item } from 'devextreme-react/validation-summary';
+import Axios from 'axios';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -72,40 +75,43 @@ const residences = [
 
 type BasicFormProps = {} & FormProps;
 
-class BasicForms extends Component<BasicFormProps & RouteComponentProps> {
-    state = {
+function BasicForms (props: BasicFormProps) {
+
+    const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser} = useContext(FileContext)
+    let history = useHistory();
+    
+    const state = {
         confirmDirty: false,
     };
-    handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        this.props.form &&
-            this.props.form.validateFieldsAndScroll((err, values) => {
-                if (!err) {
-                    console.log('Received values of form: ', values);
-                }
-            });
+        
     };
-    handleConfirmBlur = (e: React.FocusEvent) => {
-        const value = e.target && (e.target as any).value;
-        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-    };
-    checkPassword = (rule: any, value: any, callback: any) => {
-        const form = this.props.form;
-        if (value && value !== form!.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
-        } else {
-            callback();
+    function convertObjectToOption(file: any, globalList: any[]): any{
+        if(!file) return
+        const children = file.children
+        if(children){
+            children.forEach((obj: any) => {convertObjectToOption(obj, globalList)})
         }
-    };
-    checkConfirm = (rule: any, value: any, callback: any) => {
-        const form = this.props.form;
-        if (value && this.state.confirmDirty) {
-            form!.validateFields(['confirm'], { force: true });
+        const newFile = {
+            value: file.id,
+            label: file.name,
         }
-        callback();
-    };
-    render() {
-        const { getFieldDecorator } = this.props.form!;
+        // Chonky folder not openable. Ignoring
+        if(!file.isDir){
+            globalList.push(newFile)
+        }
+    }
+    const scriptListToCascadeOptions = () => {
+        
+        let globalList: any[] = [];
+        fstate.scripts.forEach((obj: any) => {
+            convertObjectToOption(obj, globalList)
+        })
+        console.log(fstate.scripts, globalList)
+        return globalList
+    }
+        const { getFieldDecorator } = props.form!;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -135,6 +141,16 @@ class BasicForms extends Component<BasicFormProps & RouteComponentProps> {
                 <Option value="86">+86</Option>
             </Select>
         );
+        const updateFiles = async () => {
+        
+            const p = await Axios.get("/file/program").then(data => {return data.data})
+            const s = await Axios.get("/file/script").then(data => {return data.data})
+            return changeProgramScriptList(p, s, true);
+        }
+        if(!fstate.initialized){
+            updateFiles()
+        }
+
         return (
             <div className="gutter-example">
                 <BreadcrumbCustom first="任务管理" second="任务创建" />
@@ -142,15 +158,11 @@ class BasicForms extends Component<BasicFormProps & RouteComponentProps> {
                     <Col className="gutter-row">
                         <div className="gutter-box">
                             <Card title="任务创建" bordered={false}>
-                                <Form onSubmit={this.handleSubmit}>
+                                <Form onSubmit={handleSubmit}>
                                     <FormItem {...formItemLayout} label="名称" hasFeedback>
                                     <Col span={8}>
                                         {getFieldDecorator('task_name', {
                                             rules: [
-                                                {
-                                                    type: 'task_name',
-                                                    message: '请输入合理的任务名称!',
-                                                },
                                                 {
                                                     required: true,
                                                     message: '请输入任务名称!',
@@ -225,10 +237,10 @@ class BasicForms extends Component<BasicFormProps & RouteComponentProps> {
                                         {getFieldDecorator('task_script', {
                                             initialValue: [''],
                         
-                                        })(<Cascader options={taskScript} />)}
+                                        })(<Cascader options={scriptListToCascadeOptions()} />)}
                                         </Col>
                                         <Col span={2} offset={1}>
-                                        <Button onClick={() => {this.props.history.push("/hpc/files")}} size="default">
+                                        <Button onClick={() => {history.push("/hpc/files")}} size="default">
                                             上传脚本
                                         </Button>
                                         </Col>
@@ -298,7 +310,6 @@ class BasicForms extends Component<BasicFormProps & RouteComponentProps> {
                 </Row> */}
             </div>
         );
-    }
 }
 
 const BasicForm = Form.create()(withRouter(BasicForms));

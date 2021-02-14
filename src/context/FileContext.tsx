@@ -2,8 +2,8 @@ import {useContext, createContext, useState} from 'react'
 
 export type FileState = {
     fileList: any[];
-    programs: any;
-    scripts: any;
+    programs: any[];
+    scripts: any[];
     initialized: boolean;
 };
 
@@ -12,7 +12,8 @@ export type FileState = {
     changeProgramList: (state: any) => {},
     changeFileList: (state: any) => {},
     changeScriptList: (state: any) => {},
-    changeProgramScriptList: (programs: any, script: any, init: boolean) => {}
+    changeProgramScriptList: (programs: any, script: any, init: boolean) => {},
+    refreshFileBrowser:() => {},
 })
 
 export default FileContext

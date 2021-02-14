@@ -13,6 +13,8 @@ import WysiwygContext from '../../context/WysiwigContext';
 import { useHistory } from 'react-router-dom'
 import FormItem from 'antd/lib/form/FormItem';
 import Axios from 'axios';
+import { type } from 'os';
+import FileContext from '../../context/FileContext';
 
 const rawContentState = {
     entityMap: {
@@ -43,7 +45,7 @@ type WysiwygState = {
 export default function Wysiwyg () {
     const {wstate, changeState, changeScriptPath} = useContext(WysiwygContext)
     let history = useHistory();
-
+    const {fstate, refreshFileBrowser} =  useContext(FileContext)
     const onEditorChange = (editorContent: any) => {
        const curState = {...wstate}
        curState.editorContent = editorContent
@@ -85,15 +87,28 @@ export default function Wysiwyg () {
                 reject(error);
             });
         });
-
+    
     const handleSaveScript = (e: any) => {
         e.preventDefault()
+        let body2 = ""
+        // console.log(wstate.editorContent, typeof(wstate.editorContent)  )
+        if(typeof(wstate.editorContent) !== "string"){
+            (wstate.editorContent["blocks"]).forEach((element: any) => {
+                body2 += element["text"]
+                body2 += "\n"
+            });
+        } else {
+            body2 = wstate.editorContent
+        }
+        // console.log(body2, typeof(body2)  )
+        
         Axios({
             method: 'POST',
             url: 'file/editScript',
-            data: '',
+            data: body2,
             headers: { 
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "text/plain",
+                "filename": wstate.scriptPath
             }
         }).then(({data}) => {
             message.success("上传成功")
@@ -102,6 +117,8 @@ export default function Wysiwyg () {
             message.error("上传失败")
             console.log(err)
         }).finally(() =>{
+            refreshFileBrowser()
+            history.push("/hpc/files")
         })
     }
         
@@ -176,14 +193,14 @@ export default function Wysiwyg () {
                                 {draftToMarkdown(wstate.editorContent)}
                             </pre>
                         </Card>
-                    </Col>
-                    <Col className="gutter-row" md={8}>
+                                </Col> */}
+                    {/* <Col className="gutter-row" md={8}>
                         <Card title="同步转换JSON" bordered={false}>
                             <pre style={{ whiteSpace: 'normal' }}>
-                                {JSON.stringify(wstate.editorContent)}
+                                {(wstate.editorContent)}
                             </pre>
                         </Card>
-                    </Col> */}
+                    </Col>  */}
                 </Row>
                 <Card title="保存脚本" bordered={false}>
                     <Row>
@@ -198,7 +215,11 @@ export default function Wysiwyg () {
                     <FormItem  label="保存名称" >
                         <Input
                             prefix={<Icon type="book" style={{ fontSize: 13 }} />}
-                            value={wstate.scriptPath}
+                            placeholder={wstate.scriptPath}
+                            onChange={(e) => {
+                                changeScriptPath(e.target.value)
+                                //changeScriptPath()
+                            }}
                         />
                     </FormItem>
                     <Form.Item>

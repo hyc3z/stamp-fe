@@ -37,21 +37,26 @@ function MyFileBrowser (){
     const scriptMenu = {
         items: [
             {name: 'edit_script', text: '编辑脚本'},
-            {name: 'download_script', text: '下载脚本'},
+            {name: 'delete_script', text: '删除脚本'},
             {name: 'create_task_via_script', text: '创建任务'}
         ]
     }
     const programMenu = {
         items:[
-            {name: 'download_program',text: '下载程序'},
+            {name: 'delete_program',text: '删除程序'},
         ]
     }
     const {wstate, changeState, changeStateWithString, changeScriptPath} = useContext(WysiwygContext)
-    const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList} = useContext(FileContext)
+    const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser} = useContext(FileContext)
 
     // customized FB menu action devExtreme
-    const handleClickProgram = (data: any) => {
-        console.log(data)
+    const handleClickProgram = async (data: any) => {
+        if(data.itemData.text == "删除程序") {
+            const item = data.fileSystemItem
+            const path = item.path
+            const sd = await deleteFile(path, "program")
+            refreshFileBrowser()
+        }
     }
 
     const handleClickScript = async (data: any) => {
@@ -66,14 +71,42 @@ function MyFileBrowser (){
             history.push('/hpc/script/edit')
             changeStateWithString(sd["message"], path)
         }
+        if(data.itemData.text == "删除脚本") {
+            const item = data.fileSystemItem
+            const path = item.path
+            const sd = await deleteFile(path, "script")
+            refreshFileBrowser()
+        }
     }
 
-    
+    const handleToolbarClickProgram = async (params: any) =>  {
+        if(params.itemData == "refresh") {
+            refreshFileBrowser()
+        }
+    }
+    const handleToolbarClickScript = async (params: any) =>  {
+        if(params.itemData == "refresh") {
+            refreshFileBrowser()
+        }
+    }
+
+    const deleteFile = (path: string, type: string) => {
+        return Axios.get("/file/delete"+type, {params : {
+            "path": `${path}`,
+        }
+    }).then(data => {return data.data}).catch(err => {
+        message.error("删除失败")
+        console.log(err)
+    })
+    }
     const getscriptData = (path: string) => {
         return Axios.get("/file/getScript/", {params : {
             "path": `${path}`,
         }
-    }).then(data => {return data.data})
+    }).then(data => {return data.data}).catch(err => {
+        message.error("读取脚本失败")
+        console.log(err)
+    })
     }
     
     const updateProgramfiles = async () => {
@@ -115,6 +148,7 @@ function MyFileBrowser (){
             message.error("上传失败")
             console.log(err)
         }).finally(() =>{
+            refreshFileBrowser()
         })
     }
 
@@ -140,6 +174,7 @@ function MyFileBrowser (){
             message.error("上传失败")
             console.log(err)
         }).finally(() =>{
+            refreshFileBrowser()
         })
     }
   
@@ -153,10 +188,10 @@ function MyFileBrowser (){
                     <Row gutter={24}>
                     <Col span={12}>
                     {/* <FullFileBrowser folderChain={this.folderChainProgram} files={this.state.programs} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
-                    <FileManager rootFolderName={"程序文件夹"} contextMenu={programMenu} onContextMenuItemClick={handleClickProgram} fileSystemProvider={fstate.programs}/>
+                    <FileManager rootFolderName={"程序文件夹"} contextMenu={programMenu} onContextMenuItemClick={handleClickProgram} fileSystemProvider={fstate.programs} onToolbarItemClick={handleToolbarClickProgram}/>
                         </Col>
                         <Col span={12}>
-                    <FileManager rootFolderName={"脚本文件夹"} contextMenu={scriptMenu} onContextMenuItemClick={handleClickScript} fileSystemProvider={fstate.scripts}/>
+                    <FileManager rootFolderName={"脚本文件夹"} contextMenu={scriptMenu} onContextMenuItemClick={handleClickScript} fileSystemProvider={fstate.scripts} onToolbarItemClick={handleToolbarClickScript}/>
                     {/* <FullFileBrowser folderChain={this.folderChainScript} files={this.state.scripts} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
                         </Col>
                     </Row>
