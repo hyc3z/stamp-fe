@@ -13,7 +13,7 @@ import draftToMarkdown from 'draftjs-to-markdown';
 import Draft, { EditorState } from 'draft-js';
 import {  ContentState, convertToRaw } from 'draft-js';
 import FileContext, { FileState } from '../context/FileContext';
-import JobContext, { JobState, JobScript, JobSpec, JobStatus } from '../context/JobContext'
+import JobContext, { JobInfo, JobScript, JobSpec, JobStatus } from '../context/JobCreateContext'
 // import App from '../App';
 // import NotFound from '../components/pages/NotFound';
 // import Login from '../components/pages/Login';
@@ -44,7 +44,7 @@ export default function CRouter () {
         initialized: false
     }
 
-    const initJobState: JobState = {
+    const initJobState: JobInfo = {
         jobScript: {
             name: "",
             content: ""

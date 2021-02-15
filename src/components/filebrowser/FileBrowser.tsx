@@ -14,7 +14,7 @@ import Wysiwyg from '../ui/Wysiwyg'
 import WysiwygContext from '../../context/WysiwigContext';
 import FileContext from '../../context/FileContext';
 import { useHistory } from 'react-router-dom'
-import JobContext from '../../context/JobContext';
+import JobContext from '../../context/JobCreateContext';
 import { CommonSeriesSettings } from 'devextreme-react/chart';
 // import { withRouter, RouteComponentProps } from 'react-router-dom';
 
