@@ -1,7 +1,7 @@
 /**
  * Created by hao.cheng on 2017/4/13.
  */
-import React, { Component, useContext } from 'react';
+import React, { Component, useContext, useState } from 'react';
 import {
     Card,
     Form,
@@ -14,6 +14,7 @@ import {
     Col,
     Checkbox,
     Button,
+    message,
 } from 'antd';
 import LoginForm from './LoginForm';
 import ModalForm from './ModalForm';
@@ -24,6 +25,7 @@ import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import FileContext from '../../context/FileContext';
 import { Item } from 'devextreme-react/validation-summary';
 import Axios from 'axios';
+import JobContext from '../../context/JobContext';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -35,49 +37,17 @@ const resourceTypes = [
     }
 ]
 
-const taskScript = [
+const taskState = [
     {}
 ]
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
+
 
 type BasicFormProps = {} & FormProps;
 
 function BasicForms (props: BasicFormProps) {
 
     const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser} = useContext(FileContext)
+    const {jobState, changeJobScript, changeJobSpec, changeJobStatus} = useContext(JobContext)
     let history = useHistory();
     
     const state = {
@@ -85,6 +55,24 @@ function BasicForms (props: BasicFormProps) {
     };
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        Axios({
+            method: 'GET',
+            url: 'task/create',
+            headers: { 
+                "Content-Type": "text/plain",
+                "taskname": jobState.jobSpec.name,
+                "filename": jobState.jobScript.name
+            }
+        }).then(({data}) => {
+            message.success("创建成功")
+            history.push("/hpc/task/taskList")
+            // console.log(data)
+        }).catch((err) =>{
+            message.error("创建失败")
+            // console.log(err)
+        }).finally(() =>{
+            
+        })
         
     };
     function convertObjectToOption(file: any, globalList: any[]): any{
@@ -102,13 +90,25 @@ function BasicForms (props: BasicFormProps) {
             globalList.push(newFile)
         }
     }
-    const scriptListToCascadeOptions = () => {
+    function changeScriptName(e:any) {
+        const curScript =  {...jobState.jobScript}
+        curScript.name  = e
+        changeJobScript(curScript)
+    }
+
+    function changeTaskName(e:any) {
+        const cstate =  {...jobState.jobSpec}
+        // console.log(e)
+        cstate.name  = e
+        changeJobSpec(cstate)
+    }
+    const scriptListToCascadeOptions= () => {
         
         let globalList: any[] = [];
         fstate.scripts.forEach((obj: any) => {
             convertObjectToOption(obj, globalList)
         })
-        console.log(fstate.scripts, globalList)
+        // console.log(fstate.scripts, globalList)
         return globalList
     }
         const { getFieldDecorator } = props.form!;
@@ -168,7 +168,10 @@ function BasicForms (props: BasicFormProps) {
                                                     message: '请输入任务名称!',
                                                 },
                                             ],
-                                        })(<Input />)}
+                                        })(<Input onChange={(e) => {
+                                            changeTaskName(e.target.value)
+                                            //changeScriptPath()
+                                        }}/>)}
                                         </Col>
                                     </FormItem>
                                     {/* <FormItem {...formItemLayout} label="密码" hasFeedback>
@@ -234,10 +237,14 @@ function BasicForms (props: BasicFormProps) {
                                     </FormItem> */}
                                     <FormItem {...formItemLayout} label="任务脚本">
                                         <Col span={8}>
-                                        {getFieldDecorator('task_script', {
-                                            initialValue: [''],
-                        
-                                        })(<Cascader options={scriptListToCascadeOptions()} />)}
+                                        <Input
+                                        prefix={<Icon type="book" style={{ fontSize: 13 }} />}
+                                        placeholder={jobState.jobScript.name}
+                                        onChange={(e) => {
+                                            changeScriptName(e.target.value)
+                                            //changeScriptPath()
+                                        }}
+                        />
                                         </Col>
                                         <Col span={2} offset={1}>
                                         <Button onClick={() => {history.push("/hpc/files")}} size="default">

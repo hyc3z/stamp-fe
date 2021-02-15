@@ -13,7 +13,7 @@ import draftToMarkdown from 'draftjs-to-markdown';
 import Draft, { EditorState } from 'draft-js';
 import {  ContentState, convertToRaw } from 'draft-js';
 import FileContext, { FileState } from '../context/FileContext';
-
+import JobContext, { JobState, JobScript, JobSpec, JobStatus } from '../context/JobContext'
 // import App from '../App';
 // import NotFound from '../components/pages/NotFound';
 // import Login from '../components/pages/Login';
@@ -43,8 +43,20 @@ export default function CRouter () {
         scripts: [],
         initialized: false
     }
+
+    const initJobState: JobState = {
+        jobScript: {
+            name: "",
+            content: ""
+        },
+        jobSpec: {
+            name: ""
+        },
+        jobStatus: {}
+    }
     const[wstate, setState] = useState(initstate)
     const[fstate, setFileState] = useState(initFileState)
+    const[jobState, setJobState] = useState(initJobState)
     function initWysiwygState() {
         let msg = ""
         let blocksFromHtml = htmlToDraft(msg);
@@ -110,6 +122,23 @@ export default function CRouter () {
         setFileState(curstate)
     }
     
+    function changeJobScript(script: JobScript) {
+        const curstate = {...jobState}
+        curstate.jobScript = script
+        setJobState(curstate)
+    }
+
+    function changeJobSpec(spec: JobSpec) {
+        const curstate = {...jobState}
+        curstate.jobSpec = spec
+        setJobState(curstate)
+    }
+
+    function changeJobStatus(status: JobStatus) {
+        const curstate = {...jobState}
+        curstate.jobStatus = status
+        setJobState(curstate)
+    }
     function refreshFileBrowser() {
         const curstate = {...fstate}
         curstate.initialized = false
@@ -118,6 +147,7 @@ export default function CRouter () {
         return (
             <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString, changeScriptPath}}>
             <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser}}>
+            <JobContext.Provider value={{jobState, changeJobScript, changeJobSpec, changeJobStatus}}>
 
             <Switch>
                 
@@ -165,6 +195,7 @@ export default function CRouter () {
                 )}
 
             </Switch>
+            </JobContext.Provider>
             </FileContext.Provider>
             </WysiwygContext.Provider>
                 

@@ -14,6 +14,8 @@ import Wysiwyg from '../ui/Wysiwyg'
 import WysiwygContext from '../../context/WysiwigContext';
 import FileContext from '../../context/FileContext';
 import { useHistory } from 'react-router-dom'
+import JobContext from '../../context/JobContext';
+import { CommonSeriesSettings } from 'devextreme-react/chart';
 // import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 
@@ -48,6 +50,7 @@ function MyFileBrowser (){
     }
     const {wstate, changeState, changeStateWithString, changeScriptPath} = useContext(WysiwygContext)
     const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser} = useContext(FileContext)
+    const {jobState, changeJobScript, changeJobSpec, changeJobStatus} = useContext(JobContext)
 
     // customized FB menu action devExtreme
     const handleClickProgram = async (data: any) => {
@@ -58,7 +61,11 @@ function MyFileBrowser (){
             refreshFileBrowser()
         }
     }
-
+    function changeScriptName(e:any) {
+        const curScript =  {...jobState.jobScript}
+        curScript.name  = e
+        changeJobScript(curScript)
+    }
     const handleClickScript = async (data: any) => {
         if(data.itemData.text == "编辑脚本") {
             const item = data.fileSystemItem
@@ -76,6 +83,12 @@ function MyFileBrowser (){
             const path = item.path
             const sd = await deleteFile(path, "script")
             refreshFileBrowser()
+        }
+        if(data.itemData.text == "创建任务") {
+            const item = data.fileSystemItem
+            const path = item.path
+            changeScriptName(path)
+            history.push('/hpc/task/taskCreate')
         }
     }
 
