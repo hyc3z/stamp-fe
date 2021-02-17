@@ -37,7 +37,8 @@ const menus: {
             title: '集群管理',
             icon: 'area-chart',
             subs: [
-                { key: '/hpc/cluster/monitor', title: '集群监控', component: 'Echarts' },
+                { key: '/hpc/cluster/monitor', title: '集群监控', component: 'Echarts' }
+                // { key: '/hpc/cluster/terminal', title: '控制台', component: 'Terminal' }
             ]
         },
         {

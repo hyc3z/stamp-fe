@@ -1,50 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Redirect, RouteComponentProps } from 'react-router-dom';
 import NotFound from './components/pages/NotFound';
 import Login from './components/pages/Login';
 import App from './App';
 import Axios from 'axios';
+import LoginContext, {LoginInfo} from './context/LoginContext'
 
 
-const authData = async () => {
-    // console.log("Validating jwt...", localStorage.getItem("hyc-stamp-jwt"))
+function Page () {
+  const initLoginState: LoginInfo = {
+    user_name: "",
+    user_jwt: "",
+    validated: false
+}
+const [authstate, changeAuthstate] = useState(initLoginState)
+
+const validateLogin = async () => {
     const res = await Axios.get("/user/validate")
-    return res.data === "true"
+    // console.log("I",res.data, res.data.message === "true")
+    const curstate = {...authstate}
+    curstate.validated = (res.data.message === "true")
+    changeAuthstate(curstate)
 }
 
-interface PrivateRouteProps {
-    component?:React.ElementType;
-    render?: (props: RouteComponentProps<any>) => React.ReactNode;
-    path?: string | string[];
-    exact?: boolean;
-    sensitive?: boolean;
-    strict?: boolean;
+const changeLoginState = (loginstate: LoginInfo) => {
+    changeAuthstate(loginstate)
 }
-const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({
-  component: Component,
-  ...routeProps
-}) => {
-  const isSignedIn = authData();
-  console.log(isSignedIn)
-  return (
-    <Route
-      {...routeProps}
-      render={(props) =>
-        isSignedIn ? Component : <Redirect to={'/login'} />
-      }
-    />
-  );
-};
+return (
+  <LoginContext.Provider value={{authstate, validateLogin, changeLoginState}}>
+ 
+  <Router>
+  <Route path = "/" render={() => <Redirect to = '/login' />} />
+  <Route path="/404" component={NotFound} />
+  <Route path="/login" component={Login} />
+  <Route path="/hpc" component={App} />
+  {/* <Route component={NotFound} />   */}
+</Router>
+</LoginContext.Provider>
+)
+}
 
-
-
-export default () => (
-    
-    <Router>
-        <Route path = "/" render={() => <Redirect to = '/login' />} />
-        <Route path="/404" component={NotFound} />
-        <Route path="/login" component={Login} />
-        <Route path="/hpc" component={App} />
-        {/* <Route component={NotFound} />   */}
-    </Router>
-);
+export default Page;

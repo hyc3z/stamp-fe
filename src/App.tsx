@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Routes from './routes';
 import DocumentTitle from 'react-document-title';
 import SiderCustom from './components/SiderCustom';
@@ -6,7 +6,9 @@ import HeaderCustom from './components/HeaderCustom';
 import { Layout, notification, Icon } from 'antd';
 // import { ThemePicker } from './components/widget';
 import { connectAlita } from 'redux-alita';
-
+import LoginContext, {LoginInfo} from './context/LoginContext'
+import Axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 const { Content, Footer } = Layout;
 
@@ -16,103 +18,38 @@ type AppProps = {
     responsive: any;
 };
 
-class App extends Component<AppProps> {
-    state = {
-        collapsed: false,
-        title: '',
-    };
-    componentWillMount() {
-        const { setAlitaState } = this.props;
-        let user,
-            storageUser = localStorage.getItem('user');
-        user = storageUser && JSON.parse(storageUser);
-        // user && receiveData(user, 'auth');
-        user && setAlitaState({ stateName: 'auth', data: user });
-        // receiveData({a: 213}, 'auth');
-        // fetchData({funcName: 'admin', stateName: 'auth'});
-        this.getClientWidth();
-        window.onresize = () => {
-            // console.log('屏幕变化了');
-            this.getClientWidth();
-        };
+function App (props: AppProps) {
+
+    const [collapsed, setcollapsed] = useState(false)
+   
+    
+
+    const toggle = () => {
+        setcollapsed(!collapsed)
     }
-    componentDidMount() {
-        const openNotification = () => {
-            notification.open({
-                message: '博主-hyc3z',
-                description: (
-                    <div>
-                        <p>
-                            GitHub地址：{' '}
-                            <a
-                                href="https://github.com/hyc3z"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                https://github.com/hyc3z
-                            </a>
-                        </p>
-                        <p>
-                            博客地址：{' '}
-                            <a
-                                href="https://hyc3z.github.io/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                https://hyc3z.github.io/
-                            </a>
-                        </p>
-                    </div>
-                ),
-                icon: <Icon type="smile-circle" style={{ color: 'red' }} />,
-                duration: 0,
-            });
-            localStorage.setItem('isFirst', JSON.stringify(true));
-        };
-        const storageFirst = localStorage.getItem('isFirst');
-        if (storageFirst) {
-            const isFirst = JSON.parse(storageFirst);
-            !isFirst && openNotification();
-        }
-    }
-    getClientWidth = () => {
-        // 获取当前浏览器宽度并设置responsive管理响应式
-        // const { setAlitaState } = this.props;
-        const clientWidth = window.innerWidth;
-        // console.log(clientWidth);
-        // setAlitaState({ stateName: 'responsive', data: { isMobile: clientWidth <= 992 } });
-        // receiveData({isMobile: clientWidth <= 992}, 'responsive');
-    };
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-    render() {
-        const { title } = this.state;
-        const { auth = { data: {} }, responsive = { data: {} } } = this.props;
+    const title = "";
+    const { auth = { data: {} }, responsive = { data: {} } } = props;
         return (
             <DocumentTitle title={title}>
                 <Layout>
-                    {!responsive.data.isMobile && <SiderCustom collapsed={this.state.collapsed} />}
+                    {!responsive.data.isMobile && <SiderCustom collapsed={collapsed} />}
                     {/* <ThemePicker /> */}
                     <Layout style={{ flexDirection: 'column' }}>
                         <HeaderCustom
-                            toggle={this.toggle}
-                            collapsed={this.state.collapsed}
+                            toggle={toggle}
+                            collapsed={collapsed}
                             user={auth.data || {}}
                         />
-                        <Content style={{ margin: '0 16px', overflow: 'initial', flex: '1 1 0' }}>
+                        <Content style={{ margin: '0 16px',  flex: '1 1 0' }}>
                             <Routes />
                         </Content>
-                        <Footer style={{ textAlign: 'center' }}>
+                        {/* <Footer style={{ textAlign: 'center' }}>
                             hpc管理系统 v0.1.0 ©{new Date().getFullYear()}
-                        </Footer>
+                        </Footer> */}
                     </Layout>
                 </Layout>
             </DocumentTitle>
         );
-    }
 }
 
 export default connectAlita(['auth', 'responsive'])(App);

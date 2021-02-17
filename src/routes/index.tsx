@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
@@ -14,6 +14,10 @@ import Draft, { EditorState } from 'draft-js';
 import {  ContentState, convertToRaw } from 'draft-js';
 import FileContext, { FileState } from '../context/FileContext';
 import JobContext, { JobInfo, JobScript, JobSpec, JobStatus } from '../context/JobCreateContext'
+import JobListContext, { SlurmJobList } from '../context/JobListContext';
+import LoginContext, {LoginInfo} from '../context/LoginContext'
+import Login from '../components/pages/Login';
+
 // import App from '../App';
 // import NotFound from '../components/pages/NotFound';
 // import Login from '../components/pages/Login';
@@ -22,20 +26,17 @@ import JobContext, { JobInfo, JobScript, JobSpec, JobStatus } from '../context/J
 
 export default function CRouter () {
     
-    
+  
+   const {authstate, validateLogin, changeLoginState} = useContext(LoginContext)
     const requireLogin = (component: React.ReactElement) => {
-      
-        const permissions = async () => {
-            const res = await Axios.get("/user/validate")
-            return res.data === "true"
-        }
-        if (!permissions) {
-            // 线上环境判断是否登录
+        if(authstate.validated){
+            return component;
+        } else {
             return <Redirect to={'/login'} />;
         }
-        return component;
-    };
     
+        // 线上环境判断是否登录
+    };
     const initstate = initWysiwygState()
     const initFileState: FileState = {
         fileList: [],
@@ -54,9 +55,12 @@ export default function CRouter () {
         },
         jobStatus: {}
     }
+
+    const initJLState : SlurmJobList = []
     const[wstate, setState] = useState(initstate)
     const[fstate, setFileState] = useState(initFileState)
     const[jobState, setJobState] = useState(initJobState)
+    const[sjlstate, setSjlState] = useState(initJLState)
     function initWysiwygState() {
         let msg = ""
         let blocksFromHtml = htmlToDraft(msg);
@@ -144,10 +148,15 @@ export default function CRouter () {
         curstate.initialized = false
         setFileState(curstate)
     }
+
+    function updateJobList(state: SlurmJobList) {
+        setSjlState(state)
+    }
         return (
             <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString, changeScriptPath}}>
             <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser}}>
             <JobContext.Provider value={{jobState, changeJobScript, changeJobSpec, changeJobStatus}}>
+            <JobListContext.Provider value = {{sjlstate, updateJobList}} >
 
             <Switch>
                 
@@ -183,7 +192,7 @@ export default function CRouter () {
                                                 <Component {...merge} />
                                             </DocumentTitle>
                                         );
-                                        return requireLogin(wrappedComponent);
+                                        return requireLogin(wrappedComponent)
                                     }}
                                 />
                             );
@@ -195,6 +204,7 @@ export default function CRouter () {
                 )}
 
             </Switch>
+            </JobListContext.Provider>
             </JobContext.Provider>
             </FileContext.Provider>
             </WysiwygContext.Provider>
