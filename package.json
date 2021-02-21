@@ -10,6 +10,7 @@
         "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.3",
         "@babel/plugin-syntax-numeric-separator": "^7.10.4",
         "@babel/plugin-syntax-optional-chaining": "^7.8.3",
+        "@grafana/ui": "^7.4.2",
         "@svgr/webpack": "4.3.2",
         "@types/classnames": "^2.2.9",
         "@types/dateformat": "^3.0.1",

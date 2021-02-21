@@ -117,7 +117,7 @@ export default function Wysiwyg () {
                                 <Editor
                                     contentState={wstate.contentState}
                                     editorState={wstate.editorState}
-                                    toolbarHidden={true}
+                                    toolbarHidden
                                     toolbarClassName="home-toolbar"
                                     wrapperClassName="home-wrapper"
                                     editorClassName="home-editor"
