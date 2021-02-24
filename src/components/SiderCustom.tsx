@@ -1,12 +1,12 @@
 /**
  * Created by hao.cheng on 2017/4/13.
  */
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { Layout } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import routes from '../routes/config';
+import routes, {AdminMenu} from '../routes/config';
 import SiderMenu from './SiderMenu';
-
+import LoginContext from '../context/LoginContext'
 const { Sider } = Layout;
 
 type SiderCustomProps = RouteComponentProps<any> & {
@@ -22,6 +22,7 @@ type SiderCustomState = {
 };
 
 class SiderCustom extends Component<SiderCustomProps, SiderCustomState> {
+
     static getDerivedStateFromProps(props: any, state: any) {
         if (props.collapsed !== state.collapsed) {
             const state1 = SiderCustom.setMenuOpen(props);
@@ -77,9 +78,11 @@ class SiderCustom extends Component<SiderCustomProps, SiderCustomState> {
             firstHide: false,
         });
     };
+    
     render() {
         const { selectedKey, openKey, firstHide, collapsed } = this.state;
         return (
+            
             <Sider
                 trigger={null}
                 breakpoint="lg"
@@ -88,7 +91,9 @@ class SiderCustom extends Component<SiderCustomProps, SiderCustomState> {
             >
                 <div className="logo">hpc管理系统</div>
                 <SiderMenu
-                    menus={routes.menus}
+                    menus={() => {
+                        const {authstate} = useContext(LoginContext)    
+                        return authstate.user_type === "admin" ? AdminMenu.menus:  routes.menus}}
                     onClick={this.menuClick}
                     mode="inline"
                     selectedKeys={[selectedKey]}

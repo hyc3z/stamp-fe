@@ -1,11 +1,8 @@
-import { FileActionHandler, ChonkyActions,FullFileBrowser } from 'chonky';
-// import { VFSBrowser } from './VFSBrowser'
 import React, { useContext } from 'react';
 import Axios from 'axios';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import { Row, Col, Card, Form, Upload, Button, Icon, message } from 'antd';
 import CloudUploadOutlined from '@ant-design/icons/CloudUploadOutlined'
-import qs from 'qs'
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 import FileManager from 'devextreme-react/file-manager'

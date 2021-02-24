@@ -11,7 +11,8 @@ function Page () {
   const initLoginState: LoginInfo = {
     user_name: "",
     user_jwt: "",
-    validated: false
+    validated: false,
+    user_type: "user"
 }
 const [authstate, changeAuthstate] = useState(initLoginState)
 
@@ -29,7 +30,6 @@ const changeLoginState = (loginstate: LoginInfo) => {
 }
 return (
   <LoginContext.Provider value={{authstate, validateLogin, changeLoginState}}>
- 
   <Router>
   <Route path = "/" render={() => <Redirect to = '/login' />} />
   <Route path="/404" component={NotFound} />

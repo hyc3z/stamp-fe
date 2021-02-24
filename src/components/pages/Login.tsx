@@ -42,13 +42,20 @@ function Login (props: LoginProps) {
                 const curstate: LoginInfo = {
                     user_name: un,
                     user_jwt: msg,
-                    validated: true
+                    validated: true,
+                    user_type: "user"
                 }
+                let userType = await axios.get('/user/isAdmin', {
+                    headers : {
+                        "Stamp_oauth_username" : un
+                    }
+                })
+                curstate.user_type = userType.data.message ? "admin" : "user"
                 changeLoginState(curstate)
                 history.push('/hpc/task/taskList');
             } else {
                 alert("用户名或密码错误！")
-            }
+            }                                                                                                                                 
         });
         
         

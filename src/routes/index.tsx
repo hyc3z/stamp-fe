@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
-import routesConfig, { IFMenuBase, IFMenu } from './config';
+import userMenu, { AdminMenu, IFMenuBase, IFMenu } from './config';
 import queryString from 'query-string';
 import Axios from 'axios';
 import WysiwygContext, {WysiwygState} from '../context/WysiwigContext'
@@ -17,6 +17,7 @@ import JobContext, { JobInfo, JobScript, JobSpec, JobStatus } from '../context/J
 import JobListContext, { SlurmJobList } from '../context/JobListContext';
 import LoginContext, {LoginInfo} from '../context/LoginContext'
 import Login from '../components/pages/Login';
+import UserMenu from './config';
 
 // import App from '../App';
 // import NotFound from '../components/pages/NotFound';
@@ -26,7 +27,7 @@ import Login from '../components/pages/Login';
 
 export default function CRouter () {
     
-  
+   const [state, refreshState] = useState(false)
    const {authstate, validateLogin, changeLoginState} = useContext(LoginContext)
     const requireLogin = (component: React.ReactElement) => {
         if(authstate.validated){
@@ -152,16 +153,17 @@ export default function CRouter () {
     function updateJobList(state: SlurmJobList) {
         setSjlState(state)
     }
+    function getRoutesConfig() {
+        return authstate.user_type === "admin" ? AdminMenu: UserMenu
+    }
         return (
             <WysiwygContext.Provider value={{wstate, changeState, changeStateWithString, changeScriptPath}}>
             <FileContext.Provider value={{fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser}}>
             <JobContext.Provider value={{jobState, changeJobScript, changeJobSpec, changeJobStatus}}>
             <JobListContext.Provider value = {{sjlstate, updateJobList}} >
-
             <Switch>
-                
-                {Object.keys(routesConfig).map(key =>
-                    routesConfig[key].map((r: IFMenu) => {
+                {Object.keys(getRoutesConfig()).map(key =>
+                    (getRoutesConfig()[key]).map((r: IFMenu) => {
                         const route = (r: IFMenuBase) => {
                             const Component = r.component && AllComponents[r.component];
                             return (
