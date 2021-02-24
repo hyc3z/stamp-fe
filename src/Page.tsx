@@ -25,6 +25,7 @@ const validateLogin = async () => {
 
 const changeLoginState = (loginstate: LoginInfo) => {
     changeAuthstate(loginstate)
+    localStorage.setItem('hyc-stamp-jwt', loginstate.user_jwt)
 }
 return (
   <LoginContext.Provider value={{authstate, validateLogin, changeLoginState}}>

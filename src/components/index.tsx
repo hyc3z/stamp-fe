@@ -29,6 +29,7 @@ import Cssmodule from './cssmodule';
 import MapUi from './ui/map';
 import QueryParams from './extension/QueryParams';
 import MyFileBrowser from './filebrowser/FileBrowser';
+// import MyResultBrowser from '../filebrowser/ResultBrowser';
 import Terminal from './terminal/Terminal'
 const WysiwygBundle = Loadable({
     // 按需加载富文本配置
@@ -42,6 +43,7 @@ export default {
     AdvancedTable,
     ScriptTable,
     MyFileBrowser,
+    // MyResultBrowser,
     AsynchronousTable,
     Echarts,
     Recharts,
