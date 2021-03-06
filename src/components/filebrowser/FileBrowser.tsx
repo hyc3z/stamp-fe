@@ -37,6 +37,7 @@ function MyFileBrowser (){
         items: [
             {name: 'edit_script', text: '编辑脚本'},
             {name: 'delete_script', text: '删除脚本'},
+            {name: 'download_script', text: '下载脚本'},
             {name: 'create_task_via_script', text: '创建任务'}
         ]
     }
@@ -81,6 +82,13 @@ function MyFileBrowser (){
             const sd = await deleteFile(path, "script")
             refreshFileBrowser()
         }
+        if(data.itemData.text == "下载脚本") {
+            const item = data.fileSystemItem
+            const path = item.path
+            const sd = await downloadFile(path)
+            
+            refreshFileBrowser()
+        }
         if(data.itemData.text == "创建任务") {
             const item = data.fileSystemItem
             const path = item.path
@@ -109,6 +117,29 @@ function MyFileBrowser (){
         console.log(err)
     })
     }
+
+    const downloadFile = (path: string) => {
+        Axios({
+            url:`/file/download/${path}`,
+            method: "POST",
+            responseType: "blob",
+        }).then(data => {
+            console.log(data.data)
+            const url = window.URL.createObjectURL(new Blob([data.data]))
+            // 再输入到 Blob 生成文件
+            const link = document.createElement('a')
+            // 指定生成的文件名
+            link.href = url
+            link.setAttribute('download', path)
+            document.body.appendChild(link )
+            link.click()
+            document.body.removeChild(link )
+        }).catch(err => {
+            message.error("下载失败")
+            console.log(err)
+        })
+    }
+
     const getscriptData = (path: string) => {
         return Axios.get("/file/getScript/", {params : {
             "path": `${path}`,
