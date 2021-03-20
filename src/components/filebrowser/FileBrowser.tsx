@@ -188,8 +188,7 @@ function MyFileBrowser (){
                 return
             }
             const path = item.path
-            const sd = await getscriptData(path)
-            history.push('/hpc/result/download')
+            const sd = await downloadFile(path)
         }
        
     }
@@ -251,23 +250,8 @@ function MyFileBrowser (){
         return (
             <div>
                 <BreadcrumbCustom first="文件管理" />
-                <Tabs defaultActiveKey="1" >
-                <TabPane tab="程序" key="1">
-                <Card title="文件管理" bordered={false}>
-                    <FileManager rootFolderName={"程序文件夹"} contextMenu={programMenu} onContextMenuItemClick={handleClickProgram} fileSystemProvider={fstate.programs} onToolbarItemClick={handleToolbarClickProgram}/>
-                        
-                        <Upload
-                            showUploadList = {false}
-                            customRequest = {handleUploadProgram}
-                        >
-                        <Button >
-                            <CloudUploadOutlined translate={"default"}/>上传程序
-                        </Button>
-                        </Upload>
-                    
-                </Card>
-                </TabPane>
-                <TabPane tab={"脚本"} key="2">
+                <Tabs defaultActiveKey="1" onChange={() => {updateFiles(); getResultData()}}>
+                <TabPane tab={"脚本"} key="1">
                 <Card title="脚本文件夹" bordered={false}>
 
                     <FileManager rootFolderName={"脚本文件夹"} contextMenu={scriptMenu} onContextMenuItemClick={handleClickScript} fileSystemProvider={fstate.scripts} onToolbarItemClick={handleToolbarClickScript}/>
@@ -282,6 +266,22 @@ function MyFileBrowser (){
                         </Upload>
                         </Card>
                 </TabPane>
+                <TabPane tab="程序" key="2">
+                <Card title="文件管理" bordered={false}>
+                    <FileManager rootFolderName={"程序文件夹"} contextMenu={programMenu} onContextMenuItemClick={handleClickProgram} fileSystemProvider={fstate.programs} onToolbarItemClick={handleToolbarClickProgram}/>
+                        
+                        <Upload
+                            showUploadList = {false}
+                            customRequest = {handleUploadProgram}
+                        >
+                        <Button >
+                            <CloudUploadOutlined translate={"default"}/>上传程序
+                        </Button>
+                        </Upload>
+                    
+                </Card>
+                </TabPane>
+                
                 <TabPane tab={"运行结果"} key="3">
                 <Card title="结果文件夹" bordered={false}>
                     <FileManager rootFolderName={"结果文件夹"} contextMenu={resultMenu} onContextMenuItemClick={handleClickResult} fileSystemProvider={resultList} onToolbarItemClick={() => {getResultData()}}/>

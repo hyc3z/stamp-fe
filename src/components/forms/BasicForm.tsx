@@ -20,7 +20,7 @@ import LoginForm from './LoginForm';
 import ModalForm from './ModalForm';
 import HorizontalForm from './HorizontalForm';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import { FormProps } from 'antd/lib/form';
+import { FormProps, FormComponentProps } from 'antd/lib/form';
 import { withRouter, RouteComponentProps, useHistory } from 'react-router-dom';
 import FileContext from '../../context/FileContext';
 import { Item } from 'devextreme-react/validation-summary';
@@ -43,36 +43,102 @@ const taskState = [
 
 
 type BasicFormProps = {} & FormProps;
+function formatNumber(value: string) {
+    value += '';
+    const list = value.split('.');
+    const prefix = list[0].charAt(0) === '-' ? '-' : '';
+    let num = prefix ? list[0].slice(1) : list[0];
+    let result = '';
+    while (num.length > 3) {
+      result = `,${num.slice(-3)}${result}`;
+      num = num.slice(0, num.length - 3);
+    }
+    if (num) {
+      result = num + result;
+    }
+    return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
+  }
+  
+  function NumericInput(this: any, props:any): JSX.Element{
+    const onChange = (e: { target: { value: any; }; }) => {
+      const { value } = e.target;
+      const reg = /^(0|[1-9]\d{0,9})$/;
+      if ((!isNaN(value) && reg.test(value))) {
+        props.onChange(value);
+      }
+    };
+  
+    // '.' at the end or only '-' in the input box.
+    const onBlur = () => {
+      const { value, onBlur, onChange } = props;
+      let valueTemp = value;
+      if (value.charAt(value.length - 1) === '.' || value === '-') {
+        valueTemp = value.slice(0, -1);
+      }
+      onChange(valueTemp.replace(/0*(\d+)/, '$1'));
+      if (onBlur) {
+        onBlur();
+      }
+    };
 
+    
+        const { value } = props;
+        const title = value ? (
+          <span className="numeric-input-title">{value !== '-' ? formatNumber(value) : '-'}</span>
+        ) : (
+          'Input a number'
+        );
+        return (
+          <Tooltip
+            trigger={'focus'}
+            title={title}
+            placement="topLeft"
+            overlayClassName="numeric-input"
+          >
+            <Input
+              {...props}
+              onChange={onChange}
+              onBlur={onBlur}
+              placeholder="Input a number"
+              maxLength={25}
+            />
+          </Tooltip>
+        );
+      
+}
 function BasicForms (props: BasicFormProps) {
 
     const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser} = useContext(FileContext)
     const {jobState, changeJobScript, changeJobSpec, changeJobStatus} = useContext(JobContext)
     let history = useHistory();
-    
     const state = {
         confirmDirty: false,
     };
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        Axios({
-            method: 'GET',
-            url: 'task/create',
-            headers: { 
-                "Content-Type": "text/plain",
-                "taskname": jobState.jobSpec.name,
-                "filename": jobState.jobScript.name
-            }
-        }).then(({data}) => {
-            message.success("创建成功")
-            history.push("/hpc/task/taskList")
-            // console.log(data)
-        }).catch((err) =>{
-            message.error("创建失败")
-            // console.log(err)
-        }).finally(() =>{
-            
+        props.form?.validateFields((err:any, values: any) => {
+            Axios({
+                method: 'GET',
+                url: 'task/create',
+                headers: { 
+                    "Content-Type": "text/plain",
+                    "taskname": jobState.jobSpec.name,
+                    "filename": jobState.jobScript.name,
+                    "resource-Type": values.res_type[0],
+                    "resource-Amount": values.res_amount,
+                }
+            }).then(({data}) => {
+                message.success("创建成功")
+                history.push("/hpc/task/taskList")
+                // console.log(data)
+            }).catch((err) =>{
+                message.error("创建失败")
+                // console.log(err)
+            }).finally(() =>{
+                
+            })
         })
+        
         
     };
     function convertObjectToOption(file: any, globalList: any[]): any{
@@ -174,69 +240,58 @@ function BasicForms (props: BasicFormProps) {
                                         }}/>)}
                                         </Col>
                                     </FormItem>
-                                    {/* <FormItem {...formItemLayout} label="密码" hasFeedback>
-                                        {getFieldDecorator('password', {
-                                            rules: [
-                                                {
-                                                    required: true,
-                                                    message: '请输入密码!',
-                                                },
-                                                {
-                                                    validator: this.checkConfirm,
-                                                },
-                                            ],
-                                        })(<Input type="password" />)}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} label="确认密码" hasFeedback>
-                                        {getFieldDecorator('confirm', {
-                                            rules: [
-                                                {
-                                                    required: true,
-                                                    message: '请确认你的密码!',
-                                                },
-                                                {
-                                                    validator: this.checkPassword,
-                                                },
-                                            ],
-                                        })(
-                                            <Input
-                                                type="password"
-                                                onBlur={this.handleConfirmBlur}
-                                            />
-                                        )}
-                                    </FormItem> */}
                                     
-                                    {/* <FormItem {...formItemLayout} label="资源类型">
+                                     <FormItem {...formItemLayout} label="资源类型">
+                                    <Col span={8}>
+
                                         {getFieldDecorator('res_type', {
                                             initialValue: ['CPU'],
                         
                                         })(<Cascader options={resourceTypes} />)}
+                                    </Col>
                                     </FormItem>
                                     <FormItem
                                         {...formItemLayout}
                                         label={
                                             <span>
                                                 资源数量
-                                                <Tooltip title="资源类型为CPU：代表任务需要的CPU核心个数">
+                                                <Tooltip title="代表任务需要的资源数量">
                                                     <Icon type="question-circle-o" />
                                                 </Tooltip>
                                             </span>
                                         }
                                         hasFeedback
                                     >
+                                    <Col span={8}>
+
                                         {getFieldDecorator('res_amount', {
+                                            initialValue: '0',
                                             rules: [
                                                 {
                                                     required: true,
                                                     message: '请输入资源数量!',
-                                                    whitespace: false,
-
+                                                    
                                                 },
+                                                {
+                                                    whitespace: false,
+                                                    
+                                                }
                                             ],
-                                        })(<Input />)}
-                                    </FormItem> */}
+                                        })(<NumericInput min={0}/>)}
+                                    </Col>
+                                    </FormItem> 
                                     <FormItem {...formItemLayout} label="任务脚本">
                                         <Col span={8}>
+                                        {getFieldDecorator('script', {
+                                            initialValue: jobState.jobScript.name,
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message: '请输入脚本名称!',
+                                                    
+                                                },
+                                            ],
+                                        })(
                                         <Input
                                         prefix={<Icon type="book" style={{ fontSize: 13 }} />}
                                         placeholder={jobState.jobScript.name}
@@ -244,44 +299,15 @@ function BasicForms (props: BasicFormProps) {
                                             changeScriptName(e.target.value)
                                             //changeScriptPath()
                                         }}
-                        />
+                                        />)}
                                         </Col>
                                         <Col span={2} offset={1}>
                                         <Button onClick={() => {history.push("/hpc/files")}} size="default">
-                                            上传脚本
+                                            上传/选择脚本
                                         </Button>
                                         </Col>
                                     </FormItem>
-                                    {/* <FormItem
-                                        {...formItemLayout}
-                                        label="验证码"
-                                        extra="我们必须确认你不是机器人."
-                                    >
-                                        <Row gutter={8}>
-                                            <Col span={12}>
-                                                {getFieldDecorator('captcha', {
-                                                    rules: [
-                                                        {
-                                                            required: true,
-                                                            message: '请输入你获取的验证码!',
-                                                        },
-                                                    ],
-                                                })(<Input size="large" />)}
-                                            </Col>
-                                            <Col span={12}>
-                                                <Button size="large">获取验证码</Button>
-                                            </Col>
-                                        </Row>
-                                    </FormItem> */}
-                                    {/* <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
-                                        {getFieldDecorator('agreement', {
-                                            valuePropName: 'checked',
-                                        })(
-                                            <Checkbox>
-                                                我已经阅读过 <span>协议</span>
-                                            </Checkbox>
-                                        )}
-                                    </FormItem> */}
+                
                                     <FormItem {...tailFormItemLayout}>
                                         <Button type="primary" htmlType="submit" size="large">
                                             提交任务

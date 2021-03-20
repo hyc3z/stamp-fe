@@ -12,11 +12,12 @@ import Axios from 'axios';
 import dateformat from 'dateformat'
 
 const columns: ColumnProps<any>[] = [
+    { title: '任务序号',  dataIndex: 'taskId', key: 'id' },
     { title: '任务名称',  dataIndex: 'taskName', key: 'name' },
     { title: '运行状态',  dataIndex: 'state.stateDescription', key: 'state' },
     { title: '开始时间', dataIndex: 'startTime', key: '1' },
     { title: '结束时间', dataIndex: 'finishTime', key: '2' },
-    { title: '资源类型', dataIndex: 'resourceType', key: '3' },
+    { title: '资源类型', dataIndex: 'resource.typeDescription', key: '3' },
     { title: '资源数量', dataIndex: 'resourceAmount', key: '4' },
     // { title: 'Column 5', dataIndex: 'address', key: '5' },
     // { title: 'Column 6', dataIndex: 'address', key: '6' },
@@ -26,7 +27,7 @@ const columns: ColumnProps<any>[] = [
         title: '操作',
         key: 'operation',
         fixed: 'right',
-        width: 250,
+        width: 120,
         render: (text: any, record: any) => (
             <span>
                 <Row gutter={24}>
@@ -34,11 +35,11 @@ const columns: ColumnProps<any>[] = [
                         <Button>
                         <StopOutlined translate={"default"}/>停止任务</Button>
                     </Col>
-                    <Col span={11}>
+                    {/* <Col span={11}>
                     <Button>
                     <InfoCircleOutlined translate={"default"}/>任务详情
                     </Button>
-                    </Col>
+                    </Col> */}
                 </Row>
             </span>
         ),
