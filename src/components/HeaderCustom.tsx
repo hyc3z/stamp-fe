@@ -79,17 +79,7 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
         const { responsive = { data: {} } } = this.props;
         return (
             <Header className="custom-theme header">
-                {responsive.data.isMobile ? (
-                    <Popover
-                        content={<SiderCustom popoverHide={this.popoverHide} />}
-                        trigger="click"
-                        placement="bottomLeft"
-                        visible={this.state.visible}
-                        onVisibleChange={this.handleVisibleChange}
-                    >
-                        <Icon type="bars" className="header__trigger custom-trigger" />
-                    </Popover>
-                ) : (
+                {(
                     <Icon
                         className="header__trigger custom-trigger"
                         type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}

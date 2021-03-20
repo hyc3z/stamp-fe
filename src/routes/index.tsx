@@ -43,7 +43,8 @@ export default function CRouter () {
         fileList: [],
         programs: [],
         scripts: [],
-        initialized: false
+        results: [],
+        initialized: false,
     }
 
     const initJobState: JobInfo = {
@@ -179,7 +180,7 @@ export default function CRouter () {
                                         const { params } = props.match;
                                         Object.keys(params).forEach(key => {
                                             params[key] =
-                                                params[key] && params[key].replace(reg, '');
+                                                params[key] && params[key]?.replace(reg, '');
                                         });
                                         props.match.params = { ...params };
                                         const merge = {

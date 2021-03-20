@@ -55,6 +55,7 @@ function FixedTable() {
             Axios.get("/task/tasks").then(
                 data => {
                     let res = data.data
+                    console.log(res)
                     for (let element of res) {
                         element.startTime = dateformat(element.startTime, "yyyy-mm-dd HH:MM:ss")
                         element.finishTime = dateformat(element.finishTime, "yyyy-mm-dd HH:MM:ss")

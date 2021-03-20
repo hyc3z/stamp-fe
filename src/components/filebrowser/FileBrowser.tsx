@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Axios from 'axios';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import { Row, Col, Card, Form, Upload, Button, Icon, message } from 'antd';
+import { Row, Col, Card, Form, Upload, Button, Icon, message, Tabs } from 'antd';
 import CloudUploadOutlined from '@ant-design/icons/CloudUploadOutlined'
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
@@ -14,7 +14,7 @@ import { useHistory } from 'react-router-dom'
 import JobContext from '../../context/JobCreateContext';
 import { CommonSeriesSettings } from 'devextreme-react/chart';
 // import { withRouter, RouteComponentProps } from 'react-router-dom';
-
+const { TabPane } = Tabs
 
 function MyFileBrowser (){
 
@@ -49,7 +49,7 @@ function MyFileBrowser (){
     const {wstate, changeState, changeStateWithString, changeScriptPath} = useContext(WysiwygContext)
     const {fstate, changeProgramList, changeFileList, changeScriptList, changeProgramScriptList, refreshFileBrowser} = useContext(FileContext)
     const {jobState, changeJobScript, changeJobSpec, changeJobStatus} = useContext(JobContext)
-
+    const [resultList, changeResultList] = useState([] as any[])
     // customized FB menu action devExtreme
     const handleClickProgram = async (data: any) => {
         if(data.itemData.text == "删除程序") {
@@ -139,7 +139,12 @@ function MyFileBrowser (){
             console.log(err)
         })
     }
-
+    const getResultData = () => {
+        return Axios.get("/file/result/").then(data => {console.log(data.data);changeResultList(data.data)}).catch(err => {
+        message.error("获取结果失败")
+        console.log(err)
+    })
+    } 
     const getscriptData = (path: string) => {
         return Axios.get("/file/getScript/", {params : {
             "path": `${path}`,
@@ -158,7 +163,7 @@ function MyFileBrowser (){
     }
 
     const updateFiles = async () => {
-        
+        getResultData()
         const p = await Axios.get("/file/program").then(data => {return data.data})
         const s = await Axios.get("/file/script").then(data => {return data.data})
         return changeProgramScriptList(p, s, true);
@@ -168,6 +173,27 @@ function MyFileBrowser (){
         console.log("ckpt",file,fileList)
         fileList = fileList.length? [fileList[fileList.length - 1]] : []
     }
+
+    const resultMenu = {
+        items:[
+            {name: 'get_result',text: '下载结果'},
+        ]
+    }
+
+    const handleClickResult = async (data: any) => {
+        if(data.itemData.text == "下载结果") {
+            const item = data.fileSystemItem
+            if(item.isDirectory) {
+                message.error("无法下载结果")
+                return
+            }
+            const path = item.path
+            const sd = await getscriptData(path)
+            history.push('/hpc/result/download')
+        }
+       
+    }
+
     
     const handleUploadProgram = (data:any) => {
      
@@ -225,21 +251,11 @@ function MyFileBrowser (){
         return (
             <div>
                 <BreadcrumbCustom first="文件管理" />
+                <Tabs defaultActiveKey="1" >
+                <TabPane tab="程序" key="1">
                 <Card title="文件管理" bordered={false}>
-                    <Row gutter={24}>
-                    <Col span={12}>
-                    {/* <FullFileBrowser folderChain={this.folderChainProgram} files={this.state.programs} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
                     <FileManager rootFolderName={"程序文件夹"} contextMenu={programMenu} onContextMenuItemClick={handleClickProgram} fileSystemProvider={fstate.programs} onToolbarItemClick={handleToolbarClickProgram}/>
-                        </Col>
-                        <Col span={12}>
-                    <FileManager rootFolderName={"脚本文件夹"} contextMenu={scriptMenu} onContextMenuItemClick={handleClickScript} fileSystemProvider={fstate.scripts} onToolbarItemClick={handleToolbarClickScript}/>
-                    {/* <FullFileBrowser folderChain={this.folderChainScript} files={this.state.scripts} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
-                        </Col>
-                    </Row>
-                    <p></p>
-                    <Row gutter={24}>
-                        <Col span={5}></Col>
-                        <Col span={7}>
+                        
                         <Upload
                             showUploadList = {false}
                             customRequest = {handleUploadProgram}
@@ -248,20 +264,31 @@ function MyFileBrowser (){
                             <CloudUploadOutlined translate={"default"}/>上传程序
                         </Button>
                         </Upload>
-                    </Col>
-                    <Col span={5}></Col>
-                    <Col span={7}>
-                    <Upload
-                        showUploadList = {false}
-                        customRequest = {handleUploadScript}
-                    >
-                      <Button>
-                        <CloudUploadOutlined translate={"default"}/>上传脚本
-                      </Button>
-                    </Upload>
-                    </Col>
-                        </Row>
+                    
                 </Card>
+                </TabPane>
+                <TabPane tab={"脚本"} key="2">
+                <Card title="脚本文件夹" bordered={false}>
+
+                    <FileManager rootFolderName={"脚本文件夹"} contextMenu={scriptMenu} onContextMenuItemClick={handleClickScript} fileSystemProvider={fstate.scripts} onToolbarItemClick={handleToolbarClickScript}/>
+                    {/* <FullFileBrowser folderChain={this.folderChainScript} files={this.state.scripts} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
+                    <Upload
+                            showUploadList = {false}
+                            customRequest = {handleUploadScript}
+                        >
+                        <Button >
+                            <CloudUploadOutlined translate={"default"}/>上传脚本
+                        </Button>
+                        </Upload>
+                        </Card>
+                </TabPane>
+                <TabPane tab={"运行结果"} key="3">
+                <Card title="结果文件夹" bordered={false}>
+                    <FileManager rootFolderName={"结果文件夹"} contextMenu={resultMenu} onContextMenuItemClick={handleClickResult} fileSystemProvider={resultList} onToolbarItemClick={() => {getResultData()}}/>
+                    {/* <FullFileBrowser folderChain={this.folderChainScript} files={this.state.scripts} fileActions={this.myFileActions} onFileAction={this.handleAction}/> */}
+                </Card>
+                </TabPane>
+                </Tabs>
             </div>
         )
 };

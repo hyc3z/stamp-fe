@@ -4,6 +4,7 @@ export type FileState = {
     fileList: any[];
     programs: any[];
     scripts: any[];
+    results: any[];
     initialized: boolean;
 };
 

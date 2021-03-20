@@ -28,11 +28,12 @@ function App (props: AppProps) {
         setcollapsed(!collapsed)
     }
     const title = "";
-    const { auth = { data: {} }, responsive = { data: {} } } = props;
+    const auth = { data: {} };
+    const responsive = { data: {} };
         return (
             <DocumentTitle title={title}>
                 <Layout>
-                    {!responsive.data.isMobile && <SiderCustom collapsed={collapsed} />}
+                    {<SiderCustom collapsed={collapsed} />}
                     {/* <ThemePicker /> */}
                     <Layout style={{ flexDirection: 'column' }}>
                         <HeaderCustom
