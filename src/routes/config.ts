@@ -29,7 +29,9 @@ const UserMenu: {
             icon: 'copy',
             subs: [
                 { key: '/hpc/task/taskList', title: '任务列表', component: 'AdvancedTable' },
-                { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm'}
+                { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm'},
+                { key: '/hpc/task/taskEnv', title: '环境变量配置', component: 'EditableTable'}
+
             ],
         },
         {
