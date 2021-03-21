@@ -1,8 +1,8 @@
 /**
  * Created by hao.cheng on 2017/4/16.
  */
-import React, { useContext, useState } from 'react';
-import { Table, Icon, Button } from 'antd';
+import React, { useContext, useRef, useState } from 'react';
+import { Table, Icon, Button, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { Row, Col, Card } from 'antd';
 import StopOutlined from '@ant-design/icons/StopOutlined'
@@ -10,11 +10,22 @@ import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined'
 import JobListContext from '../../context/JobListContext';
 import Axios from 'axios';
 import dateformat from 'dateformat'
-
+function stopJob(data: any) {
+    Axios({
+        url:`/task/task`,
+        method: "DELETE",
+        headers: { 
+            "task-identifier": `${data.taskId}`,
+        }
+    }).catch(err => {
+        message.error("停止任务失败")
+        console.log(err)
+    })
+}
 const columns: ColumnProps<any>[] = [
-    { title: '任务序号',  dataIndex: 'taskId', key: 'id' },
-    { title: '任务名称',  dataIndex: 'taskName', key: 'name' },
-    { title: '运行状态',  dataIndex: 'state.stateDescription', key: 'state' },
+    { title: '任务序号', dataIndex: 'taskId', key: 'id' },
+    { title: '任务名称', dataIndex: 'taskName', key: 'name' },
+    { title: '运行状态', dataIndex: 'state.stateDescription', key: 'state' },
     { title: '开始时间', dataIndex: 'startTime', key: '1' },
     { title: '结束时间', dataIndex: 'finishTime', key: '2' },
     { title: '资源类型', dataIndex: 'resource.typeDescription', key: '3' },
@@ -32,7 +43,7 @@ const columns: ColumnProps<any>[] = [
             <span>
                 <Row gutter={24}>
                     <Col span={11}>
-                        <Button>
+                        <Button onClick={() => {stopJob(record)}}>
                         <StopOutlined translate={"default"}/>停止任务</Button>
                     </Col>
                     {/* <Col span={11}>

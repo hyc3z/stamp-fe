@@ -62,7 +62,7 @@ function formatNumber(value: string) {
   function NumericInput(this: any, props:any): JSX.Element{
     const onChange = (e: { target: { value: any; }; }) => {
       const { value } = e.target;
-      const reg = /^(0|[1-9]\d{0,9})$/;
+      const reg = /^([1-9]\d{0,9})$/;
       if ((!isNaN(value) && reg.test(value))) {
         props.onChange(value);
       }
@@ -126,6 +126,7 @@ function BasicForms (props: BasicFormProps) {
                     "filename": jobState.jobScript.name,
                     "resource-Type": values.res_type[0],
                     "resource-Amount": values.res_amount,
+                    "tasks": values.tasks
                 }
             }).then(({data}) => {
                 message.success("创建成功")
@@ -254,8 +255,8 @@ function BasicForms (props: BasicFormProps) {
                                         {...formItemLayout}
                                         label={
                                             <span>
-                                                资源数量
-                                                <Tooltip title="代表任务需要的资源数量">
+                                                资源数量/任务
+                                                <Tooltip title="代表每个任务需要的资源数量">
                                                     <Icon type="question-circle-o" />
                                                 </Tooltip>
                                             </span>
@@ -265,11 +266,41 @@ function BasicForms (props: BasicFormProps) {
                                     <Col span={8}>
 
                                         {getFieldDecorator('res_amount', {
-                                            initialValue: '0',
+                                            initialValue: '1',
                                             rules: [
                                                 {
                                                     required: true,
                                                     message: '请输入资源数量!',
+                                                    
+                                                },
+                                                {
+                                                    whitespace: false,
+                                                    
+                                                }
+                                            ],
+                                        })(<NumericInput min={0}/>)}
+                                    </Col>
+                                    </FormItem> 
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label={
+                                            <span>
+                                                任务数量
+                                                <Tooltip title="代表任务包含的实例数量">
+                                                    <Icon type="question-circle-o" />
+                                                </Tooltip>
+                                            </span>
+                                        }
+                                        hasFeedback
+                                    >
+                                    <Col span={8}>
+
+                                        {getFieldDecorator('tasks', {
+                                            initialValue: '1',
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message: '请输入任务数量!',
                                                     
                                                 },
                                                 {
