@@ -91,50 +91,38 @@ class EditableTable extends React.Component {
     super(props);
     this.columns = [
       {
-        title: 'name',
-        dataIndex: 'name',
+        title: '变量名',
+        dataIndex: 'envkey',
         width: '30%',
         editable: true,
       },
       {
-        title: 'age',
-        dataIndex: 'age',
-      },
-      {
-        title: 'address',
-        dataIndex: 'address',
+        title: '变量值',
+        dataIndex: 'envval',
+        width: '30%',
+        editable: true,
       },
       {
         title: 'operation',
         dataIndex: 'operation',
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
-            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-              <a>Delete</a>
+            <Popconfirm title="确认删除?" onConfirm={() => this.handleDelete(record.key)}>
+              <a>删除</a>
             </Popconfirm>
           ) : null,
       },
     ];
 
     this.state = {
-      dataSource: [
-        {
-          key: '0',
-          name: 'Edward King 0',
-          age: '32',
-          address: 'London, Park Lane no. 0',
-        },
-        {
-          key: '1',
-          name: 'Edward King 1',
-          age: '32',
-          address: 'London, Park Lane no. 1',
-        },
-      ],
-      count: 2,
+      dataSource: [],
+      count: 0,
     };
   }
 
+  async fetchEnvVar() {
+    
+  }
   handleDelete = key => {
     const dataSource = [...this.state.dataSource];
     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
@@ -144,9 +132,8 @@ class EditableTable extends React.Component {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
-      name: `Edward King ${count}`,
-      age: 32,
-      address: `London, Park Lane no. ${count}`,
+      envkey: "PATH",
+      envval: "/usr/bin"
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -191,7 +178,7 @@ class EditableTable extends React.Component {
     return (
       <div className="editable-div">
         <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-          Add a row
+          添加环境变量
         </Button>
         <Table
           components={components}
