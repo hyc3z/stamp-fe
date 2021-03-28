@@ -1,6 +1,7 @@
 import { Table, Input, Button, Popconfirm, Form } from 'antd';
 import React from 'react';
-import './editable.css'
+import './editable.css';
+import Axios from 'axios';
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -10,6 +11,7 @@ const EditableRow = ({ form, index, ...props }) => (
 );
 
 const EditableFormRow = Form.create()(EditableRow);
+
 
 class EditableCell extends React.Component {
   state = {
@@ -92,13 +94,13 @@ class EditableTable extends React.Component {
     this.columns = [
       {
         title: '变量名',
-        dataIndex: 'envkey',
+        dataIndex: 'envKey',
         width: '30%',
         editable: true,
       },
       {
         title: '变量值',
-        dataIndex: 'envval',
+        dataIndex: 'envVal',
         width: '30%',
         editable: true,
       },
@@ -107,7 +109,7 @@ class EditableTable extends React.Component {
         dataIndex: 'operation',
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
-            <Popconfirm title="确认删除?" onConfirm={() => this.handleDelete(record.key)}>
+            <Popconfirm title="确认删除?" onConfirm={() => this.handleDelete(record)}>
               <a>删除</a>
             </Popconfirm>
           ) : null,
@@ -120,21 +122,58 @@ class EditableTable extends React.Component {
     };
   }
 
-  async fetchEnvVar() {
-    
+  componentDidMount = async () => {
+    await this.getEnv()
   }
+
+  async getEnv() {
+    Axios.get("/config/env").then(
+      data => {
+          let res = data.data
+          console.log("env",res)
+          this.setState({ dataSource: res, count: data.length})
+      }
+  )
+  }
+
+  async storeEnv(envId, envKey, envVal) {
+    console.log("storeEnv",envId,envKey,envVal)
+    Axios({
+      method: "GET",
+      url: "/config/storeEnv",
+      headers: {
+        "stamp_user_env_id": envId,
+        "stamp_user_env_key": envKey,
+        "stamp_user_env_val": envVal
+      }
+    }).then()
+  }
+  async deleteEnv(envId) {
+    Axios({
+      method: "GET",
+      url: "/config/deleteEnv",
+      headers: {
+        "stamp_user_env_id": envId,
+      }
+    }).then()
+  }
+
+  
   handleDelete = key => {
     const dataSource = [...this.state.dataSource];
+    console.log(key)
+    this.deleteEnv(key.envId)
     this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
   };
 
   handleAdd = () => {
     const { count, dataSource } = this.state;
     const newData = {
-      key: count,
-      envkey: "PATH",
-      envval: "/usr/bin"
+      envId: -1,
+      envKey: "PATH",
+      envVal: "/usr/bin"
     };
+    this.storeEnv(newData.envId, newData.envKey, newData.envVal)
     this.setState({
       dataSource: [...dataSource, newData],
       count: count + 1,
@@ -144,12 +183,8 @@ class EditableTable extends React.Component {
   handleSave = row => {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    this.setState({ dataSource: newData });
+    console.log("editing:", row);
+    this.storeEnv(row.envId, row.envKey, row.envVal)
   };
 
   render() {
