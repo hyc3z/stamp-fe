@@ -130,14 +130,14 @@ class EditableTable extends React.Component {
     Axios.get("/config/env").then(
       data => {
           let res = data.data
-          console.log("env",res)
+          //  console.log("env",res)
           this.setState({ dataSource: res, count: data.length})
       }
   )
   }
 
   async storeEnv(envId, envKey, envVal) {
-    console.log("storeEnv",envId,envKey,envVal)
+    //  console.log("storeEnv",envId,envKey,envVal)
     Axios({
       method: "GET",
       url: "/config/storeEnv",
@@ -159,32 +159,30 @@ class EditableTable extends React.Component {
   }
 
   
-  handleDelete = key => {
+  handleDelete = async (key)=> {
     const dataSource = [...this.state.dataSource];
-    console.log(key)
-    this.deleteEnv(key.envId)
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    //  console.log(key)
+    await this.deleteEnv(key.envId)
+    await this.getEnv()
   };
 
-  handleAdd = () => {
+  handleAdd = async () => {
     const { count, dataSource } = this.state;
     const newData = {
       envId: -1,
       envKey: "PATH",
       envVal: "/usr/bin"
     };
-    this.storeEnv(newData.envId, newData.envKey, newData.envVal)
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
+    await this.storeEnv(newData.envId, newData.envKey, newData.envVal)
+    await this.getEnv()
   };
 
-  handleSave = row => {
+  handleSave = async (row) => {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex(item => row.key === item.key);
-    console.log("editing:", row);
-    this.storeEnv(row.envId, row.envKey, row.envVal)
+    //  console.log("editing:", row);
+    await this.storeEnv(row.envId, row.envKey, row.envVal)
+    await this.getEnv()
   };
 
   render() {
