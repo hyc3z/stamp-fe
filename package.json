@@ -210,6 +210,7 @@
         ]
     },
     "devDependencies": {
+        "@babel/plugin-proposal-optional-chaining": "^7.13.12",
         "@babel/plugin-syntax-top-level-await": "^7.12.1",
         "@commitlint/cli": "^8.2.0",
         "@commitlint/config-conventional": "^8.2.0",
