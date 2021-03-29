@@ -2,6 +2,8 @@ import { Table, Input, Button, Popconfirm, Form } from 'antd';
 import React from 'react';
 import './editable.css';
 import Axios from 'axios';
+import BreadcrumbCustom from '../BreadcrumbCustom';
+
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -215,6 +217,8 @@ class EditableTable extends React.Component {
       };
     });
     return (
+      <div className="gutter-example">
+        <BreadcrumbCustom first="任务管理" second="环境变量配置" />
       <div className="editable-div">
         <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
           添加环境变量
@@ -226,6 +230,7 @@ class EditableTable extends React.Component {
           dataSource={dataSource}
           columns={columns}
         />
+      </div>
       </div>
     );
   }

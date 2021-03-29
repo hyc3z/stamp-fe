@@ -32,6 +32,7 @@ import MyFileBrowser from './filebrowser/FileBrowser';
 // import MyResultBrowser from '../filebrowser/ResultBrowser';
 import Terminal from './terminal/Terminal';
 import EditableTable from './tables/EditableTable';
+import PartitionTable from './tables/PartitionTable';
 const WysiwygBundle = Loadable({
     // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -43,6 +44,7 @@ export default {
     BasicTable,
     AdvancedTable,
     EditableTable,
+    PartitionTable,
     ScriptTable,
     MyFileBrowser,
     // MyResultBrowser,
