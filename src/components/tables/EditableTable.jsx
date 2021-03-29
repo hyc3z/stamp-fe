@@ -163,7 +163,9 @@ class EditableTable extends React.Component {
     const dataSource = [...this.state.dataSource];
     //  console.log(key)
     await this.deleteEnv(key.envId)
-    await this.getEnv()
+    setTimeout(() => {
+      this.getEnv()
+    }, 100)
   };
 
   handleAdd = async () => {
@@ -174,7 +176,9 @@ class EditableTable extends React.Component {
       envVal: "/usr/bin"
     };
     await this.storeEnv(newData.envId, newData.envKey, newData.envVal)
-    await this.getEnv()
+    setTimeout(() => {
+      this.getEnv()
+    }, 100)
   };
 
   handleSave = async (row) => {
@@ -182,7 +186,9 @@ class EditableTable extends React.Component {
     const index = newData.findIndex(item => row.key === item.key);
     //  console.log("editing:", row);
     await this.storeEnv(row.envId, row.envKey, row.envVal)
-    await this.getEnv()
+    setTimeout(() => {
+      this.getEnv()
+    }, 100)
   };
 
   render() {
