@@ -65,7 +65,7 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
     logout = () => {
         console.log("Removed Item.")
         localStorage.removeItem('hyc-stamp-jwt');
-        this.props.history.push('/login');
+        window.open('/login', "_self");
     };
     popoverHide = () => {
         this.setState({
