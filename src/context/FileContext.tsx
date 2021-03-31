@@ -1,4 +1,4 @@
-import {useContext, createContext, useState} from 'react'
+import { useContext, createContext, useState } from 'react';
 
 export type FileState = {
     fileList: any[];
@@ -8,13 +8,13 @@ export type FileState = {
     initialized: boolean;
 };
 
- const FileContext = createContext({
+const FileContext = createContext({
     fstate: {} as FileState,
     changeProgramList: (state: any) => {},
     changeFileList: (state: any) => {},
     changeScriptList: (state: any) => {},
     changeProgramScriptList: (programs: any, script: any, init: boolean) => {},
-    refreshFileBrowser:() => {},
-})
+    refreshFileBrowser: () => {},
+});
 
-export default FileContext
+export default FileContext;

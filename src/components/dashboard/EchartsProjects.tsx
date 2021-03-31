@@ -17,22 +17,25 @@ const option = {
         left: 'center',
         textStyle: {
             color: '#ccc',
-            fontSize: 10
-        }
+            fontSize: 10,
+        },
     },
     backgroundColor: '#08263a',
-    xAxis: [{
-        show: true,
-        data: xAxisData,
-        axisLabel: {
-            textStyle: {
-                color: '#ccc'
-            }
-        }
-    }, {
-        show: false,
-        data: xAxisData
-    }],
+    xAxis: [
+        {
+            show: true,
+            data: xAxisData,
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc',
+                },
+            },
+        },
+        {
+            show: false,
+            data: xAxisData,
+        },
+    ],
     tooltip: {},
     visualMap: {
         show: false,
@@ -40,62 +43,64 @@ const option = {
         max: 50,
         dimension: 0,
         inRange: {
-            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055']
-        }
+            color: ['#4a657a', '#308e92', '#b1cfa5', '#f5d69f', '#f5898b', '#ef5055'],
+        },
     },
     yAxis: {
         axisLine: {
-            show: false
+            show: false,
         },
         axisLabel: {
             textStyle: {
-                color: '#ccc'
-            }
+                color: '#ccc',
+            },
         },
         splitLine: {
             show: true,
             lineStyle: {
-                color: '#08263f'
-            }
+                color: '#08263f',
+            },
         },
         axisTick: {
-            show: false
-        }
+            show: false,
+        },
     },
     series: [
         {
-        name: 'Simulate Shadow',
-        type: 'line',
-        data: data,
-        z: 2,
-        showSymbol: false,
-        animationDelay: 0,
-        animationEasing: 'linear',
-        animationDuration: 1200,
-        lineStyle: {
-            normal: {
-                color: 'transparent'
-            }
+            name: 'Simulate Shadow',
+            type: 'line',
+            data: data,
+            z: 2,
+            showSymbol: false,
+            animationDelay: 0,
+            animationEasing: 'linear',
+            animationDuration: 1200,
+            lineStyle: {
+                normal: {
+                    color: 'transparent',
+                },
+            },
+            areaStyle: {
+                normal: {
+                    color: '#08263a',
+                    shadowBlur: 50,
+                    shadowColor: '#000',
+                },
+            },
         },
-        areaStyle: {
-            normal: {
-                color: '#08263a',
-                shadowBlur: 50,
-                shadowColor: '#000'
-            }
-        }
-    }, {
-        name: '完成项目数',
-        type: 'bar',
-        data: data,
-        xAxisIndex: 1,
-        z: 3,
-        itemStyle: {
-            normal: {
-                barBorderRadius: 5
-            }
-        }
-    }],
+        {
+            name: '完成项目数',
+            type: 'bar',
+            data: data,
+            xAxisIndex: 1,
+            z: 3,
+            itemStyle: {
+                normal: {
+                    barBorderRadius: 5,
+                },
+            },
+        },
+    ],
     animationEasing: 'elasticOut',
     animationEasingUpdate: 'elasticOut',
     animationDelay: function (idx: number) {
@@ -103,12 +108,12 @@ const option = {
     },
     animationDelayUpdate: function (idx: number) {
         return idx * 20;
-    }
+    },
 };
 const EchartsProjects = () => (
     <ReactEcharts
         option={option}
-        style={{height: '212px', width: '100%'}}
+        style={{ height: '212px', width: '100%' }}
         className={'react_for_echarts'}
     />
 );

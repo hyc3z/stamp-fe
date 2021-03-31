@@ -5,8 +5,8 @@ import React from 'react';
 import { Table, Icon, Button } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { Row, Col, Card } from 'antd';
-import StopOutlined from '@ant-design/icons/StopOutlined'
-import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined'
+import StopOutlined from '@ant-design/icons/StopOutlined';
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 
 const columns: ColumnProps<any>[] = [
     { title: '脚本名称', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
@@ -25,35 +25,34 @@ const columns: ColumnProps<any>[] = [
         fixed: 'right',
         width: 250,
         render: (text: any, record: any) => (
-                <Row gutter={24}>
-                    
-                    <Col span={11}>
+            <Row gutter={24}>
+                <Col span={11}>
                     <Button>
-                    <InfoCircleOutlined translate={"default"}/>脚本详情
+                        <InfoCircleOutlined translate={'default'} />
+                        脚本详情
                     </Button>
-                    </Col>
-                </Row>
+                </Col>
+            </Row>
         ),
     },
-    
 ];
 
 const data = [
     {
         key: '1',
         name: 'MPI-1',
-        elapsed: "24h",
+        elapsed: '24h',
         start_time: '2021-01-01:000000',
-        res_type:'CPU',
-        res_amount:'2',
+        res_type: 'CPU',
+        res_amount: '2',
     },
     {
         key: '1',
         name: 'MPI-2',
-        elapsed: "24h",
+        elapsed: '24h',
         start_time: '2021-01-01:000000',
-        res_type:'CPU',
-        res_amount:'4',
+        res_type: 'CPU',
+        res_amount: '4',
     },
 ];
 

@@ -49,7 +49,7 @@ class SearchTable extends React.Component {
             filterDropdownVisible: false,
             filtered: !!searchText,
             data: data
-                .map(record => {
+                .map((record) => {
                     const match = record.name.match(reg);
                     if (!match) {
                         return null;
@@ -69,7 +69,7 @@ class SearchTable extends React.Component {
                         ),
                     };
                 })
-                .filter(record => !!record),
+                .filter((record) => !!record),
         });
     };
     render() {
@@ -81,7 +81,7 @@ class SearchTable extends React.Component {
                 filterDropdown: (
                     <div className="custom-filter-dropdown">
                         <Input
-                            ref={ele => (this.searchInput = ele)}
+                            ref={(ele) => (this.searchInput = ele)}
                             placeholder="Search name"
                             value={this.state.searchText}
                             onChange={this.onInputChange}

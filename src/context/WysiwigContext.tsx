@@ -1,4 +1,4 @@
-import {useContext, createContext, useState} from 'react'
+import { useContext, createContext, useState } from 'react';
 import { ContentState, EditorState } from 'react-draft-wysiwyg';
 
 export type WysiwygState = {
@@ -8,11 +8,11 @@ export type WysiwygState = {
     scriptPath: string;
 };
 
- const WysiwygContext = createContext({
+const WysiwygContext = createContext({
     wstate: {} as WysiwygState,
     changeState: (state: any) => {},
     changeStateWithString: (str: string, str2?: string) => {},
-    changeScriptPath: (path: string) => {}
-})
+    changeScriptPath: (path: string) => {},
+});
 
-export default WysiwygContext
+export default WysiwygContext;

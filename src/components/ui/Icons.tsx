@@ -273,7 +273,7 @@ const icons = {
         'api',
     ],
 };
-const iconsList = Object.keys(icons).map(v =>
+const iconsList = Object.keys(icons).map((v) =>
     (icons as any)[v].map((icon: any, i: number) => (
         <li key={i}>
             <Icon type={icon} style={{ fontSize: 15 }} />

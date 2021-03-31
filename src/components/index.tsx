@@ -23,8 +23,6 @@ import Dashboard from './dashboard/Dashboard';
 import Gallery from './ui/Gallery';
 import BasicAnimations from './animation/BasicAnimations';
 import ExampleAnimations from './animation/ExampleAnimations';
-import AuthBasic from './auth/Basic';
-import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
 import MapUi from './ui/map';
 import QueryParams from './extension/QueryParams';
@@ -63,11 +61,9 @@ export default {
     Gallery,
     BasicAnimations,
     ExampleAnimations,
-    AuthBasic,
-    RouterEnter,
     WysiwygBundle,
     Cssmodule,
     MapUi,
     QueryParams,
-    Terminal
+    Terminal,
 } as any;

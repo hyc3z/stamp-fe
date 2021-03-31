@@ -74,7 +74,10 @@ class SortTable extends React.Component<any, SortTableState> {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
-                filters: [{ text: 'Joe', value: 'Joe' }, { text: 'Jim', value: 'Jim' }],
+                filters: [
+                    { text: 'Joe', value: 'Joe' },
+                    { text: 'Jim', value: 'Jim' },
+                ],
                 filteredValue: filteredInfo.name || null,
                 onFilter: (value: any, record: any) => record.name.includes(value),
                 sorter: (a: any, b: any) => a.name.length - b.name.length,

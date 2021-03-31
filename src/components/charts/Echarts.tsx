@@ -24,7 +24,7 @@ class Echarts extends React.Component {
                         </div>
                     </Col>
                 </Row>
-            {/* 
+                {/* 
                 <Row gutter={16}>
                     <Col className="gutter-row" md={12}>
                         <div className="gutter-box">
@@ -54,7 +54,7 @@ class Echarts extends React.Component {
                 </Row>
                                 */}
             </div>
-        )
+        );
     }
 }
 

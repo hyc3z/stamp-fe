@@ -390,7 +390,7 @@ const geoCoordMap = {
     大庆: [125.03, 46.58],
 };
 
-const convertData = function(data: any) {
+const convertData = function (data: any) {
     let res = [];
     for (let i = 0; i < data.length; i++) {
         let geoCoord = (geoCoordMap as any)[data[i].name];
@@ -451,7 +451,7 @@ const option = {
             type: 'scatter',
             coordinateSystem: 'geo',
             data: convertData(data),
-            symbolSize: function(val: any) {
+            symbolSize: function (val: any) {
                 return val[2] / 10;
             },
             label: {
@@ -476,12 +476,12 @@ const option = {
             coordinateSystem: 'geo',
             data: convertData(
                 data
-                    .sort(function(a, b) {
+                    .sort(function (a, b) {
                         return b.value - a.value;
                     })
                     .slice(0, 6)
             ),
-            symbolSize: function(val: any) {
+            symbolSize: function (val: any) {
                 return val[2] / 10;
             },
             showEffectOn: 'render',

@@ -33,7 +33,7 @@ class Notifications extends Component {
     };
     openNotification3 = () => {
         const key = `open${Date.now()}`;
-        const btnClick = function() {
+        const btnClick = function () {
             // to hide notification box
             notification.close(key);
         };
@@ -144,7 +144,7 @@ class Notifications extends Component {
                                         });
                                     }}
                                 >
-                                    {options.map(val => (
+                                    {options.map((val) => (
                                         <Option key={val} value={val}>
                                             {val}
                                         </Option>

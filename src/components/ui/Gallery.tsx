@@ -35,7 +35,7 @@ class Gallery extends React.Component {
             if (item.w < 1 || item.h < 1) {
                 // unknown size
                 var img = new Image();
-                img.onload = function() {
+                img.onload = function () {
                     // will get size after load
                     item.w = (this as any).width; // set image width
                     item.h = (this as any).height; // set image height
@@ -89,8 +89,8 @@ class Gallery extends React.Component {
                 'http://img.hb.aicdn.com/98c786f4314736f95a42bf927bf65a82d305a532c6258-njI6id_fw',
             ],
         ];
-        const imgsTag = imgs.map(v1 =>
-            v1.map(v2 => (
+        const imgsTag = imgs.map((v1) =>
+            v1.map((v2) => (
                 <div className="gutter-box" key={v2}>
                     <Card bordered={false} bodyStyle={{ padding: 0 }}>
                         <div>
@@ -145,7 +145,7 @@ class Gallery extends React.Component {
                     tabIndex={-1}
                     role="dialog"
                     aria-hidden="true"
-                    ref={div => {
+                    ref={(div) => {
                         this.pswpElement = div;
                     }}
                 >

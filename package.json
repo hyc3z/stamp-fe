@@ -85,6 +85,7 @@
         "postcss-normalize": "7.0.1",
         "postcss-preset-env": "6.7.0",
         "postcss-safe-parser": "4.0.1",
+        "prettier": "^2.2.1",
         "qs": "^6.9.6",
         "rc-banner-anim": "^2.4.2",
         "react": "^16.10.2",
@@ -125,7 +126,8 @@
         "build": "node scripts/build.js",
         "test": "node scripts/test.js",
         "commit": "git-cz",
-        "release": "standard-version"
+        "release": "standard-version",
+        "format": "prettier --write . "
     },
     "config": {
         "commitizen": {

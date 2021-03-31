@@ -39,7 +39,7 @@ const option = {
                 { value: 274, name: '联盟广告' },
                 { value: 235, name: '视频广告' },
                 { value: 400, name: '搜索引擎' },
-            ].sort(function(a, b) {
+            ].sort(function (a, b) {
                 return a.value - b.value;
             }),
             roseType: 'angle',
@@ -70,7 +70,7 @@ const option = {
 
             animationType: 'scale',
             animationEasing: 'elasticOut',
-            animationDelay: function(idx: any) {
+            animationDelay: function (idx: any) {
                 return Math.random() * 200;
             },
         },

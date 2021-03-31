@@ -8,10 +8,12 @@ const options = {
     mainLessFile: path.join(__dirname, './src/style/antd/index.less'),
     indexFileName: 'index.html',
     outputFilePath: path.join(__dirname, './public/theme.less'),
-}
+};
 
-generateTheme(options).then(less => {
-    console.log('Theme generated successfully');
-}).catch(error => {
-    console.log('Error', error);
-});
+generateTheme(options)
+    .then((less) => {
+        console.log('Theme generated successfully');
+    })
+    .catch((error) => {
+        console.log('Error', error);
+    });

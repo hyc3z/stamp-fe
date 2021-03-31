@@ -16,9 +16,7 @@ class BreadcrumbCustom extends React.Component<BreadcrumbCustomProps> {
         return (
             <span>
                 <Breadcrumb style={{ margin: '12px 0' }}>
-                    <Breadcrumb.Item>
-                        hpc管理系统
-                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>hpc管理系统</Breadcrumb.Item>
                     {first}
                     {second}
                 </Breadcrumb>

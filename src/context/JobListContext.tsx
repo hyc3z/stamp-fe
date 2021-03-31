@@ -1,4 +1,4 @@
-import {useContext, createContext, useState} from 'react'
+import { useContext, createContext, useState } from 'react';
 
 export type SlurmJobBrief = {
     job_id: number;
@@ -6,14 +6,14 @@ export type SlurmJobBrief = {
     cpus: number;
     job_state: string;
     start_time: Date;
-    end_time: Date
-}
+    end_time: Date;
+};
 
-export type SlurmJobList = Array<SlurmJobBrief>
+export type SlurmJobList = Array<SlurmJobBrief>;
 
 const JobListContext = createContext({
     sjlstate: {} as SlurmJobList,
     updateJobList: (state: SlurmJobList) => {},
-})
+});
 
-export default JobListContext
+export default JobListContext;

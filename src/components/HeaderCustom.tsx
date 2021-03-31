@@ -5,12 +5,12 @@ import React, { Component } from 'react';
 import screenfull from 'screenfull';
 // import avater from '../style/imgs/b1.jpg';
 import SiderCustom from './SiderCustom';
-import { Menu, Icon, Layout,  Popover } from 'antd';
+import { Menu, Icon, Layout, Popover } from 'antd';
 import { gitOauthToken, gitOauthInfo } from '../axios';
 import { queryString } from '../utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { PwaInstaller } from './widget';
-import { connectAlita } from 'redux-alita';
+
 // import { userInfo } from 'os';
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -63,9 +63,9 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
         e.key === 'logout' && this.logout();
     };
     logout = () => {
-        console.log("Removed Item.")
+        console.log('Removed Item.');
         localStorage.removeItem('hyc-stamp-jwt');
-        window.open('/login', "_self");
+        window.open('/login', '_self');
     };
     popoverHide = () => {
         this.setState({
@@ -79,13 +79,13 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
         const { responsive = { data: {} } } = this.props;
         return (
             <Header className="custom-theme header">
-                {(
+                {
                     <Icon
                         className="header__trigger custom-trigger"
                         type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
                         onClick={this.props.toggle}
                     />
-                )}
+                }
                 <Menu
                     mode="horizontal"
                     style={{ lineHeight: '64px', float: 'right' }}
@@ -124,6 +124,6 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
 const HeaderCustomConnect: React.ComponentClass<
     HeaderCustomProps,
     HeaderCustomState
-> = connectAlita(['responsive'])(HeaderCustom);
+> = HeaderCustom;
 
 export default withRouter(HeaderCustomConnect);

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import Page from './Page';
 import * as apis from './axios';
@@ -11,17 +12,18 @@ import './style/antd/index.less';
 import './style/index.less';
 import { setChonkyDefaults } from 'chonky';
 import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+import store from './store';
 // Somewhere in your `index.ts`:
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 setConfig(apis);
-Axios.defaults.baseURL='http://localhost:3078/'
+Axios.defaults.baseURL = 'http://localhost:3078/';
 Axios.interceptors.request.use(function (config) {
     let token = localStorage.getItem('hyc-stamp-jwt');
     if (token) {
-      config.headers['Authorization'] = "Bearer "+ token;
+        config.headers['Authorization'] = 'Bearer ' + token;
     }
     return config;
-  })
+});
 
 // const render = Component => { // 增加react-hot-loader保持状态刷新操作，如果不需要可去掉并把下面注释的打开
 //     ReactDOM.render(
@@ -58,9 +60,12 @@ Axios.interceptors.request.use(function (config) {
 
 ReactDOM.render(
     // <AppContainer>
-    <AlitaProvider>
+    <Provider store={store}>
+        {/* <AlitaProvider> */}
         <Page />
-    </AlitaProvider>,
+        {/* </AlitaProvider> */}
+    </Provider>,
+
     // </AppContainer>
     document.getElementById('root')
 );

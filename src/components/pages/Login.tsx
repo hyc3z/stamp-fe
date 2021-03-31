@@ -4,7 +4,7 @@
 import React, { useContext } from 'react';
 import { Form, Icon, Input, Button /*Checkbox*/ } from 'antd';
 import { PwaInstaller } from '../widget';
-import { connectAlita } from 'redux-alita';
+
 import { Redirect, RouteComponentProps, withRouter } from 'react-router';
 import { FormProps } from 'antd/lib/form';
 import axios from 'axios';
@@ -18,109 +18,104 @@ type LoginProps = {
     auth: any;
 } & RouteComponentProps &
     FormProps;
-function Login (props: LoginProps) {
-    const {authstate, changeLoginState} = useContext(LoginContext)
+function Login(props: LoginProps) {
+    const { authstate, changeLoginState } = useContext(LoginContext);
     const { getFieldDecorator } = props.form!;
     const { auth: nextAuth = {}, history } = props;
-    if(authstate.validated){
+    if (authstate.validated) {
         history.push('/hpc/task/taskList');
     }
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const { auth: nextAuth = {}, history } = props;
         props.form!.validateFields(async (err, values) => {
-            let un = values.userName
-            let pwd = values.password
+            let un = values.userName;
+            let pwd = values.password;
             let res = await axios.get(`/user/login`, {
-                headers : {
-                    "Stamp_oauth_username" : un,
-                    "Stamp_oauth_pwd": pwd
-                }
+                headers: {
+                    Stamp_oauth_username: un,
+                    Stamp_oauth_pwd: pwd,
+                },
             });
-            let msg = res && res.data && res.data.message
-            if(msg){
+            let msg = res && res.data && res.data.message;
+            if (msg) {
                 const curstate: LoginInfo = {
                     user_name: un,
                     user_jwt: msg,
                     validated: true,
-                    user_type: "user"
-                }
+                    user_type: 'user',
+                };
                 let userType = await axios.get('/user/isAdmin', {
-                    headers : {
-                        "Stamp_oauth_username" : un
-                    }
-                })
-                curstate.user_type = userType.data.message ? "admin" : "user"
-                changeLoginState(curstate)
+                    headers: {
+                        stamp_admin_username: un,
+                    },
+                });
+                curstate.user_type = userType.data.message ? 'admin' : 'user';
+                changeLoginState(curstate);
                 history.push('/hpc/task/taskList');
             } else {
-                alert("用户名或密码错误！")
-            }                                                                                                                                 
+                alert('用户名或密码错误！');
+            }
         });
-        
-        
     };
-    
-    
-        return (
-            <div className="login">
-                <div className="login-form">
-                    <div className="login-logo">
-                        <span>hpc管理系统</span>
-                        <PwaInstaller />
-                    </div>
-                    <Form onSubmit={handleSubmit} style={{ maxWidth: '300px' }}>
-                        <FormItem>
-                            {getFieldDecorator('userName', {
-                                rules: [{ required: true, message: '请输入用户名!' }],
-                            })(
-                                <Input
-                                    prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-                                    // placeholder="管理员输入admin, 游客输入guest"
-                                />
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('password', {
-                                rules: [{ required: true, message: '请输入密码!' }],
-                            })(
-                                <Input
-                                    prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
-                                    type="password"
-                                    // placeholder="管理员输入admin, 游客输入guest"
-                                />
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {/* {getFieldDecorator('remember', {
+
+    return (
+        <div className="login">
+            <div className="login-form">
+                <div className="login-logo">
+                    <span>hpc管理系统</span>
+                    <PwaInstaller />
+                </div>
+                <Form onSubmit={handleSubmit} style={{ maxWidth: '300px' }}>
+                    <FormItem>
+                        {getFieldDecorator('userName', {
+                            rules: [{ required: true, message: '请输入用户名!' }],
+                        })(
+                            <Input
+                                prefix={<Icon type="user" style={{ fontSize: 13 }} />}
+                                // placeholder="管理员输入admin, 游客输入guest"
+                            />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {getFieldDecorator('password', {
+                            rules: [{ required: true, message: '请输入密码!' }],
+                        })(
+                            <Input
+                                prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
+                                type="password"
+                                // placeholder="管理员输入admin, 游客输入guest"
+                            />
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {/* {getFieldDecorator('remember', {
                                 valuePropName: 'checked',
                                 initialValue: true,
                             })(<Checkbox>记住我</Checkbox>)} */}
-                            {/* <span className="login-form-forgot" style={{ float: 'right' }}>
+                        {/* <span className="login-form-forgot" style={{ float: 'right' }}>
                                 忘记密码
                             </span> */}
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                className="login-form-button"
-                                style={{ width: '100%' }}
-                            >
-                                登录
-                            </Button>
-                            {/* <p style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="login-form-button"
+                            style={{ width: '100%' }}
+                        >
+                            登录
+                        </Button>
+                        {/* <p style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <span>或 现在就去注册!</span>
                                 <span onClick={this.gitHub}>
                                     <Icon type="github" />
                                     (第三方登录)
                                 </span>
                             </p> */}
-                        </FormItem>
-                    </Form>
-                </div>
+                    </FormItem>
+                </Form>
             </div>
-        );
-   
-
+        </div>
+    );
 }
 
-export default connectAlita(['auth'])(Form.create()(withRouter(Login)));
+export default Form.create()(withRouter(Login));

@@ -47,7 +47,7 @@ class Recharts extends React.Component {
                     </Col>
                 </Row>
             </div>
-        )
+        );
     }
 }
 

@@ -8,7 +8,7 @@ import { FormProps } from 'antd/lib/form';
 const FormItem = Form.Item;
 
 function hasErrors(fieldsError: any) {
-    return Object.keys(fieldsError).some(field => fieldsError[field]);
+    return Object.keys(fieldsError).some((field) => fieldsError[field]);
 }
 
 type HorizontalLoginFormProps = {} & FormProps;

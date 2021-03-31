@@ -20,7 +20,7 @@ for (var i = 1; i < 20000; i++) {
 const option = {
     tooltip: {
         trigger: 'axis',
-        position: function(pt: any) {
+        position: function (pt: any) {
             return [pt[0], '10%'];
         },
     },

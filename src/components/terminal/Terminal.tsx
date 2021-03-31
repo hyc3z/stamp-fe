@@ -1,11 +1,7 @@
-import React from 'react'
-import { XTerm } from 'xterm-for-react'
-
+import React from 'react';
+import { XTerm } from 'xterm-for-react';
 
 function MyTerminal() {
-
-    return (
-        <XTerm/>
-    )
+    return <XTerm />;
 }
-export default MyTerminal
+export default MyTerminal;

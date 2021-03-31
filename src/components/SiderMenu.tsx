@@ -26,7 +26,7 @@ const renderSubMenu = (item: IFMenu) => (
             </span>
         }
     >
-        {item.subs!.map(item => renderMenuItem(item))}
+        {item.subs!.map((item) => renderMenuItem(item))}
     </Menu.SubMenu>
 );
 
@@ -36,10 +36,10 @@ type SiderMenuProps = MenuProps & {
     selectedKeys: string[];
     openKeys: string[];
     onOpenChange: (v: string[]) => void;
-}
+};
 
-export default ({ menus, ...props } : SiderMenuProps) => {
-    const [dragItems, setDragItems] = useState(menus);
+export default ({ menus, ...props }: SiderMenuProps) => {
+    const [menuItems, setmenuItems] = useState(menus);
     const reorder = (list: any, startIndex: number, endIndex: number) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -52,38 +52,12 @@ export default ({ menus, ...props } : SiderMenuProps) => {
             return;
         }
 
-        const _items = reorder(dragItems, result.source.index, result.destination.index);
-        setDragItems(_items);
+        const _items = reorder(menuItems, result.source.index, result.destination.index);
+        setmenuItems(_items);
     };
-    return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {dragItems.map((item: IFMenu, index: number) => (
-                            <Draggable key={item.key} draggableId={item.key} index={index}>
-                                {(provided, snapshot) => (
-                                    <div>
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.dragHandleProps}
-                                            {...provided.draggableProps}
-                                        >
-                                            <Menu {...props}>
-                                                {item.subs!
-                                                    ? renderSubMenu(item)
-                                                    : renderMenuItem(item)}
-                                            </Menu>
-                                        </div>
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
-    );
+    return menuItems.map((item: IFMenu, index: number) => (
+        <div>
+            <Menu {...props}>{item.subs! ? renderSubMenu(item) : renderMenuItem(item)}</Menu>
+        </div>
+    ));
 };

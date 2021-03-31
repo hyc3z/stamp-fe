@@ -7,7 +7,7 @@ class ThemePicker extends Component {
     state = {
         switcherOn: false,
         // background: localStorage.getItem('@primary-color') || '#313653',
-        background: '#313653', 
+        background: '#313653',
     };
     _switcherOn = () => {
         this.setState({

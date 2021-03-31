@@ -7,13 +7,10 @@ import TweenOne from 'rc-tween-one';
 import 'rc-banner-anim/assets/index.css';
 const BgElement = Element.BgElement;
 class Basic extends React.Component {
-    render(){
+    render() {
         return (
             <BannerAnim prefixCls="banner-user">
-                <Element
-                    prefixCls="banner-user-elem"
-                    key="0"
-                >
+                <Element prefixCls="banner-user-elem" key="0">
                     <BgElement
                         key="bg"
                         className="bg"
@@ -21,7 +18,10 @@ class Basic extends React.Component {
                             background: '#364D79',
                         }}
                     />
-                    <TweenOne className="banner-user-title" animation={{ y: 30, opacity: 0, type: 'from' }}>
+                    <TweenOne
+                        className="banner-user-title"
+                        animation={{ y: 30, opacity: 0, type: 'from' }}
+                    >
                         Ant Motion Banner
                     </TweenOne>
                     <TweenOne
@@ -31,10 +31,7 @@ class Basic extends React.Component {
                         The Fast Way Use Animation In React
                     </TweenOne>
                 </Element>
-                <Element
-                    prefixCls="banner-user-elem"
-                    key="1"
-                >
+                <Element prefixCls="banner-user-elem" key="1">
                     <BgElement
                         key="bg"
                         className="bg"
@@ -42,7 +39,10 @@ class Basic extends React.Component {
                             background: '#64CBCC',
                         }}
                     />
-                    <TweenOne className="banner-user-title" animation={{ y: 30, opacity: 0, type: 'from' }}>
+                    <TweenOne
+                        className="banner-user-title"
+                        animation={{ y: 30, opacity: 0, type: 'from' }}
+                    >
                         Ant Motion Banner
                     </TweenOne>
                     <TweenOne

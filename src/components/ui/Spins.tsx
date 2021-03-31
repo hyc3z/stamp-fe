@@ -66,7 +66,8 @@ class Spins extends React.Component {
                         <div className="gutter-box">
                             <Card bordered={false}>
                                 <Spin spinning={this.state.loading}>{container}</Spin>
-                                Loading state：<Switch checked={this.state.loading} onChange={this.toggle} />
+                                Loading state：
+                                <Switch checked={this.state.loading} onChange={this.toggle} />
                             </Card>
                         </div>
                     </Col>
@@ -78,16 +79,16 @@ class Spins extends React.Component {
                                     <Button icon="caret-right" onClick={this.nprogressStart} />
                                     <span> NProgress.start() — 显示进度条</span>
                                 </p>
-                                <p style={{marginTop: 20}}>
+                                <p style={{ marginTop: 20 }}>
                                     <Button icon="caret-right" onClick={this.nprogressDone} />
-                                    <span>  NProgress.done() — 进度条完成</span>
+                                    <span> NProgress.done() — 进度条完成</span>
                                 </p>
                             </Card>
                         </div>
                     </Col>
                 </Row>
             </div>
-        )
+        );
     }
 }
 
