@@ -31,6 +31,7 @@ import MyFileBrowser from './filebrowser/FileBrowser';
 import Terminal from './terminal/Terminal';
 import EditableTable from './tables/EditableTable';
 import PartitionTable from './tables/PartitionTable';
+import TaxTable from './tables/TaxTable';
 const WysiwygBundle = Loadable({
     // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -64,6 +65,7 @@ export default {
     WysiwygBundle,
     Cssmodule,
     MapUi,
+    TaxTable,
     QueryParams,
     Terminal,
 } as any;

@@ -41,6 +41,7 @@ export const AdminMenu: {
             subs: [
                 { key: '/hpc/cluster/monitor', title: '集群监控', component: 'Echarts' },
                 // { key: '/hpc/cluster/terminal', title: '控制台', component: 'Terminal' }
+                { key: '/hpc/cluster/usageReport', title: '计费报表', component: 'TaxTable'}
             ],
         },
         {
@@ -94,10 +95,24 @@ export const UserMenu: {
             ],
         },
         {
+            key: '/hpc/script',
+            title: '脚本管理',
+            icon: 'edit',
+            subs: [
+                // { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
+                { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' },
+            ],
+        },
+        {
             key: '/hpc/files',
             title: '文件管理',
             icon: 'database',
             component: 'MyFileBrowser',
+        },
+        {
+            key: '/hpc/info',
+            title: '操作说明',
+            icon: 'search',
         },
     ],
     others: [], // 非菜单相关路由
