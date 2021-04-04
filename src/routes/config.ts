@@ -1,4 +1,3 @@
-import Axios from 'axios';
 
 export interface IFMenuBase {
     key: string;
@@ -39,7 +38,7 @@ export const AdminMenu: {
             title: '集群管理',
             icon: 'area-chart',
             subs: [
-                { key: '/hpc/cluster/monitor', title: '集群监控', component: 'Echarts' },
+                { key: '/hpc/cluster/monitor', title: '集群监控', component: 'HycChart' },
                 // { key: '/hpc/cluster/terminal', title: '控制台', component: 'Terminal' }
                 { key: '/hpc/cluster/usageReport', title: '计费报表', component: 'TaxTable'}
             ],

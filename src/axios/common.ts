@@ -1,4 +1,5 @@
 import Axios, { AxiosResponse } from 'axios';
+import { TMetrics } from '../common/const/metrics';
 import { TPartition } from '../typings/partition';
 import { TTax } from '../typings/tax';
 
@@ -7,6 +8,13 @@ export async function getPartitionData(): Promise<TPartition[]> {
         console.log(err);
     });
     return (data as AxiosResponse<TPartition[]>)?.data ?? [];
+}
+
+export async function getMetricsData(): Promise<TMetrics[]> {
+    const data = await Axios.get('/metrics/cluster').catch((err) => {
+        console.log(err);
+    });
+    return (data as AxiosResponse<TMetrics[]>)?.data ?? [];
 }
 
 export async function getTaxData(startDate: string, endDate: string): Promise<TTax[]> {

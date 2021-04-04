@@ -4,7 +4,7 @@
 import React from 'react';
 import { Row, Col, Card } from 'antd';
 import RechartsSimpleLineChart from './RechartsSimpleLineChart';
-import RechartsBarChart from './RechartsBarChart';
+import RechartsBarChart from './HycChart';
 import RechartsRadialBarChart from './RechartsRadialBarChart';
 import RechartsRadarChart from './RechartsRadarChart';
 
