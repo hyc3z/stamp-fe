@@ -87,7 +87,7 @@ function MyFileBrowser() {
         if (data.itemData.text == '下载脚本') {
             const item = data.fileSystemItem;
             const path = item.path;
-            const sd = await downloadFile(path);
+            const sd = await downloadScript(path);
 
             refreshFileBrowser();
         }
@@ -125,9 +125,32 @@ function MyFileBrowser() {
             });
     };
 
-    const downloadFile = (path: string) => {
+    const downloadScript = (path: string) => {
         Axios({
-            url: `/file/download/${path}`,
+            url: `/file/scriptDownload/${path}`,
+            method: 'POST',
+            responseType: 'blob',
+        })
+            .then((data) => {
+                console.log(data.data);
+                const url = window.URL.createObjectURL(new Blob([data.data]));
+                // 再输入到 Blob 生成文件
+                const link = document.createElement('a');
+                // 指定生成的文件名
+                link.href = url;
+                link.setAttribute('download', path);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch((err) => {
+                message.error('下载失败');
+                console.log(err);
+            });
+    };
+    const downloadOutput = (path: string) => {
+        Axios({
+            url: `/file/outputDownload/${path}`,
             method: 'POST',
             responseType: 'blob',
         })
@@ -214,7 +237,7 @@ function MyFileBrowser() {
                 return;
             }
             const path = item.path;
-            const sd = await downloadFile(path);
+            const sd = await downloadOutput(path);
         }
     };
 
