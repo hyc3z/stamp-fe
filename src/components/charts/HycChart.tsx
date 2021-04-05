@@ -97,6 +97,7 @@ function RechartsBarChart(props:MyChartProps): JSX.Element{
           }
         ]
     }
+    console.log(props.cpuUsage)
     const option = {
         title: {
           text: 'Cpu负载情况'
@@ -167,7 +168,7 @@ function mapStateToProps(state: RootState): Pick<MyChartProps, 'cpuUsage'> {
                 CpuUsageAttributes.forEach((attribute: string) => {
                     if(attribute === 'cpu_load'){
                         Object.assign(newItem, {
-                            [`${attribute}`]: cpuUsage.cpu_load / 100,
+                            [`${attribute}`]: (cpuUsage.cpu_load < cpuUsage.cpus ? cpuUsage.cpu_load : 0) / 100,
                         })
                     } else {
                         Object.assign(newItem, {
