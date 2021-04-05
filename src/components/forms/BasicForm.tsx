@@ -70,7 +70,7 @@ function NumericInput(this: any, props: any): JSX.Element {
     const onChange = (e: { target: { value: any } }) => {
         const { value } = e.target;
         const reg = /^([1-9]\d{0,9})$/;
-        if (!isNaN(value) && reg.test(value)) {
+        if (value === '' || reg.test(value)) {
             props.onChange(value);
         }
     };
