@@ -1,7 +1,7 @@
 /**
  * Created by hao.cheng on 2017/4/21.
  */
-import { Row, Col, Card } from 'antd';
+import { Row, Col, Card, Tabs, Button } from 'antd';
 import React, { Dispatch, useEffect } from 'react';
 import {
     BarChart,
@@ -23,6 +23,8 @@ import BreadcrumbCustom from '../BreadcrumbCustom';
 import { connect } from 'react-redux';
 import { getMetricsData } from '../../axios/common';
 import ReactECharts from 'echarts-for-react';
+import './charts.css'
+
 const data = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
     { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
@@ -143,6 +145,10 @@ function RechartsBarChart(props:MyChartProps): JSX.Element{
                     <Row gutter={16}>
                         <Col className="gutter-row" md={24}>
                             <div className="gutter-box">
+                            <Tabs
+                              defaultActiveKey="1"
+                          >
+                              <Tabs.TabPane tab={'集群负载'} key="1">
                                 <Card title="集群负载" bordered={false}>
                                 
                             <ReactECharts
@@ -152,6 +158,18 @@ function RechartsBarChart(props:MyChartProps): JSX.Element{
                                 
                             />;
                                 </Card>
+                              </Tabs.TabPane>
+                              <Tabs.TabPane tab={'实时监控'} key="2">
+                                  <Card title="实时监控" bordered={false}>
+                                    <p>用户名: admin</p>
+                                    <p>密码: admin</p>
+                                    <Button type="primary" onClick={() => {window.open("http://192.168.1.2:3000")}}>
+                                        转至集群实时监控
+                                    </Button>
+                                  </Card>
+                                </Tabs.TabPane>
+
+                              </Tabs>
                             </div>
                         </Col>
                     </Row>

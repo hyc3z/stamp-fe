@@ -33,7 +33,12 @@ import EditableTable from './tables/EditableTable';
 import PartitionTable from './tables/PartitionTable';
 import TaxTable from './tables/TaxTable';
 import HycChart from './charts/HycChart';
-import ClusterConfig from './forms/ClusterConfig'
+import ClusterConfig from './forms/ClusterConfig';
+import SlurmProcessTable from './tables/SlurmProcessTable';
+const SlurmConfEditor = Loadable({
+    loader: () => import('./ui/SlurmConfEditor'),
+    loading: Loading,
+});
 const WysiwygBundle = Loadable({
     // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -52,6 +57,7 @@ export default {
     ClusterConfig,
     HycChart,
     AsynchronousTable,
+    SlurmProcessTable,
     Echarts,
     Recharts,
     Icons,
@@ -67,6 +73,7 @@ export default {
     BasicAnimations,
     ExampleAnimations,
     WysiwygBundle,
+    SlurmConfEditor,
     Cssmodule,
     MapUi,
     TaxTable,

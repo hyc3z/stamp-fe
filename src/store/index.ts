@@ -4,11 +4,13 @@ import { Partition } from './reducer/partitions';
 import { Tax } from './reducer/tax';
 import { metrics } from './reducer/metrics';
 import { Configs } from './reducer/configs';
+import { SlurmProcess } from './reducer/slurmProcess';
 const reducers = combineReducers({
     Partition,
     Tax,
     metrics,
-    Configs
+    Configs,
+    SlurmProcess
 });
 export const store: ReduxStore = createStore(reducers);
 export default store;

@@ -44,7 +44,7 @@ function RenderTaxTable(props: TaxProps) {
             <BreadcrumbCustom first="集群管理" second="计费报表" />
             <div className="gutter-box">
                 <Card title="计费报表" bordered={false}>
-                    <Table columns={columns} dataSource={props.taxes} scroll={{ x: 1300 }} />
+                    <Table columns={columns} dataSource={props.taxes} scroll={{ x: 300 }} />
                 </Card>
             </div>
         </div>

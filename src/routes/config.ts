@@ -41,7 +41,9 @@ export const AdminMenu: {
                 { key: '/hpc/cluster/monitor', title: '集群监控', component: 'HycChart' },
                 // { key: '/hpc/cluster/terminal', title: '控制台', component: 'Terminal' }
                 { key: '/hpc/cluster/usageReport', title: '计费报表', component: 'TaxTable'},
-                { key: '/hpc/cluster/config', title: '集群配置', component: 'ClusterConfig'}
+                { key: '/hpc/cluster/config', title: '集群配置', component: 'ClusterConfig'},
+                { key: '/hpc/slurm/editConfig', title: 'slurm.conf编辑', component: 'SlurmConfEditor' },
+                { key: '/hpc/slurm/processInfo', title: 'slurm进程监控', component: 'SlurmProcessTable'}
             ],
         },
         {
@@ -56,7 +58,8 @@ export const AdminMenu: {
             icon: 'edit',
             subs: [
                 // { key: '/hpc/script/list', title: '脚本列表', component: 'ScriptTable' },
-                { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' },
+                { key: '/hpc/script/edit', title: '脚本编辑', component: 'WysiwygBundle' }
+
             ],
         },
         {
@@ -82,7 +85,7 @@ export const UserMenu: {
             icon: 'copy',
             subs: [
                 { key: '/hpc/task/taskList', title: '任务列表', component: 'AdvancedTable' },
-                { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm' },
+                // { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm' },
                 { key: '/hpc/task/taskEnv', title: '环境变量配置', component: 'EditableTable' }
             ],
         },

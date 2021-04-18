@@ -41,7 +41,7 @@ function RenderPartitionTable(props: PartitionProps) {
             <BreadcrumbCustom first="任务管理" second="队列管理" />
             <div className="gutter-box">
                 <Card title="队列管理" bordered={false}>
-                    <Table columns={columns} dataSource={props.partitions} scroll={{ x: 1300 }} />
+                    <Table columns={columns} dataSource={props.partitions} scroll={{ x: 300 }} />
                 </Card>
             </div>
         </div>

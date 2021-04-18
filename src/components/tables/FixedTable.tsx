@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React, { useContext, useRef, useState } from 'react';
-import { Table, Icon, Button, message } from 'antd';
+import { Table, Icon, Button, message, Tag } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { Row, Col, Card } from 'antd';
 import StopOutlined from '@ant-design/icons/StopOutlined';
@@ -22,11 +22,25 @@ function stopJob(data: any) {
         console.log(err);
     });
 }
+const colorState: {[key:string]:string} = {
+    COMPLETED: '#99CC33',
+    FAILED: '#FF0033',
+    PENDING: '#FF9900'
+}
 const columns: ColumnProps<any>[] = [
     { title: '任务序号', dataIndex: 'taskId', key: 'id' },
     { title: '任务名称', dataIndex: 'taskName', key: 'name' },
     { title: '队列名称', dataIndex: 'partitionName', key: '5' },
-    { title: '运行状态', dataIndex: 'state.stateDescription', key: 'state' },
+    { title: '运行状态', dataIndex: 'state.stateDescription', key: 'state',
+    render: (text: string, record: any) => (
+        <Tag style={{
+            color: Object.keys(colorState).includes(text) ? colorState[text] : "#FF0033",
+            borderColor: Object.keys(colorState).includes(text) ? colorState[text] : "#FF0033"
+        }}>
+            {text}
+        </Tag>
+    )
+},
     { title: '开始时间', dataIndex: 'startTime', key: '1' },
     { title: '结束时间', dataIndex: 'finishTime', key: '2' },
     { title: '资源类型', dataIndex: 'resource.typeDescription', key: '3' },
