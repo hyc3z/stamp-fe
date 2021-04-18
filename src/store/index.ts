@@ -3,10 +3,12 @@ import { combineReducers } from 'redux';
 import { Partition } from './reducer/partitions';
 import { Tax } from './reducer/tax';
 import { metrics } from './reducer/metrics';
+import { Configs } from './reducer/configs';
 const reducers = combineReducers({
     Partition,
     Tax,
-    metrics
+    metrics,
+    Configs
 });
 export const store: ReduxStore = createStore(reducers);
 export default store;

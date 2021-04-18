@@ -40,7 +40,8 @@ export const AdminMenu: {
             subs: [
                 { key: '/hpc/cluster/monitor', title: '集群监控', component: 'HycChart' },
                 // { key: '/hpc/cluster/terminal', title: '控制台', component: 'Terminal' }
-                { key: '/hpc/cluster/usageReport', title: '计费报表', component: 'TaxTable'}
+                { key: '/hpc/cluster/usageReport', title: '计费报表', component: 'TaxTable'},
+                { key: '/hpc/cluster/config', title: '集群配置', component: 'ClusterConfig'}
             ],
         },
         {
@@ -82,15 +83,7 @@ export const UserMenu: {
             subs: [
                 { key: '/hpc/task/taskList', title: '任务列表', component: 'AdvancedTable' },
                 { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm' },
-            ],
-        },
-        {
-            key: '/hpc/cluster',
-            title: '集群管理',
-            icon: 'area-chart',
-            subs: [
-                { key: '/hpc/cluster/monitor', title: '集群监控', component: 'Echarts' },
-                // { key: '/hpc/cluster/terminal', title: '控制台', component: 'Terminal' }
+                { key: '/hpc/task/taskEnv', title: '环境变量配置', component: 'EditableTable' }
             ],
         },
         {

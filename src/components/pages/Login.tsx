@@ -63,7 +63,7 @@ function Login(props: LoginProps) {
         <div className="login">
             <div className="login-form">
                 <div className="login-logo">
-                    <span>hpc管理系统</span>
+                    <span>hpc管理系统 </span>
                     <PwaInstaller />
                 </div>
                 <Form onSubmit={handleSubmit} style={{ maxWidth: '300px' }}>

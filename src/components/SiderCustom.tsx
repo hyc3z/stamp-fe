@@ -4,7 +4,7 @@
 import React, { Component, useContext } from 'react';
 import { Layout } from 'antd';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import routes, { AdminMenu } from '../routes/config';
+import routes, { AdminMenu, UserMenu } from '../routes/config';
 import SiderMenu from './SiderMenu';
 import LoginContext from '../context/LoginContext';
 const { Sider } = Layout;
@@ -22,6 +22,7 @@ type SiderCustomState = {
 };
 
 class SiderCustom extends Component<SiderCustomProps, SiderCustomState> {
+    static contextType = LoginContext;
     static getDerivedStateFromProps(props: any, state: any) {
         if (props.collapsed !== state.collapsed) {
             const state1 = SiderCustom.setMenuOpen(props);
@@ -35,6 +36,7 @@ class SiderCustom extends Component<SiderCustomProps, SiderCustomState> {
         }
         return null;
     }
+    
     static setMenuOpen = (props: any) => {
         const { pathname } = props.location;
         return {
@@ -80,18 +82,22 @@ class SiderCustom extends Component<SiderCustomProps, SiderCustomState> {
 
     render() {
         const { selectedKey, openKey, firstHide, collapsed } = this.state;
+        const { authstate } = this.context;
         return (
+            
             <Sider
                 trigger={null}
                 breakpoint="lg"
                 collapsed={collapsed}
                 style={{ overflowY: 'auto' }}
-            >
-                <div className="logo">hpc管理系统</div>
+            >   
+                <div className="logo">
+                    {authstate.user_type === 'admin' ? 'hpc管理系统': 'hpc用户系统'}
+                </div>
                 <SiderMenu
                     menus={() => {
                         const { authstate } = useContext(LoginContext);
-                        return authstate.user_type === 'admin' ? AdminMenu.menus : routes.menus;
+                        return authstate.user_type === 'admin' ? AdminMenu.menus : UserMenu.menus;
                     }}
                     onClick={this.menuClick}
                     mode="inline"

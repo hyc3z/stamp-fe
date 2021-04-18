@@ -33,6 +33,7 @@ import EditableTable from './tables/EditableTable';
 import PartitionTable from './tables/PartitionTable';
 import TaxTable from './tables/TaxTable';
 import HycChart from './charts/HycChart';
+import ClusterConfig from './forms/ClusterConfig'
 const WysiwygBundle = Loadable({
     // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
@@ -48,6 +49,7 @@ export default {
     ScriptTable,
     MyFileBrowser,
     // MyResultBrowser,
+    ClusterConfig,
     HycChart,
     AsynchronousTable,
     Echarts,

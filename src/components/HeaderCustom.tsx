@@ -10,6 +10,7 @@ import { gitOauthToken, gitOauthInfo } from '../axios';
 import { queryString } from '../utils';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { PwaInstaller } from './widget';
+import LoginContext from '../context/LoginContext';
 
 // import { userInfo } from 'os';
 const { Header } = Layout;
@@ -33,6 +34,7 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
         user: '',
         visible: false,
     };
+    static contextType = LoginContext;
     componentDidMount() {
         const QueryString = queryString() as any;
         let _user,
@@ -97,13 +99,13 @@ class HeaderCustom extends Component<HeaderCustomProps, HeaderCustomState> {
                     <SubMenu
                         title={
                             <span className="avatar">
-                                <span>{localStorage.getItem('stamp-user-name')}</span>
-                                <i className="on bottom b-white" />
+                                <span>{this.context.authstate.user_name}</span>
+                                {/* <i className="on bottom b-white" /> */}
                             </span>
                         }
                     >
                         <MenuItemGroup title="用户中心">
-                            <Menu.Item key="setting:1">你好 - {this.props.user.userName}</Menu.Item>
+                            <Menu.Item key="setting:1">你好 - {this.context.authstate.user_name}</Menu.Item>
                             <Menu.Item key="setting:2">个人信息</Menu.Item>
                             <Menu.Item key="logout">
                                 <span onClick={this.logout}>退出登录</span>
