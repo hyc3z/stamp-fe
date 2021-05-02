@@ -1,6 +1,9 @@
 /**
  * Created by hao.cheng on 2017/4/28.
  */
+
+import { RangePickerValue } from "antd/lib/date-picker/interface";
+import moment from 'moment'
 // 获取url的参数
 export const queryString = () => {
     let _queryString: { [key: string]: any } = {};
@@ -19,3 +22,13 @@ export const queryString = () => {
     });
     return _queryString;
 };
+
+export function getCurrentTimeStamp(): string {
+   return (new Date().valueOf() / 1000).toString()
+}
+
+export function parseRangePickerValue(dates: RangePickerValue): [string, string] {
+    const startTimestamp = ((dates[0] as moment.Moment)?.valueOf() / 1000).toString() ?? "0"
+    const endTimestamp = ((dates[1] as moment.Moment)?.valueOf() / 1000).toString() ?? (new Date().valueOf() / 1000).toString()
+    return [startTimestamp, endTimestamp]
+}
