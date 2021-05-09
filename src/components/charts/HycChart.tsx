@@ -204,7 +204,7 @@ function mapDispatchToProps(
 ): Pick<MyChartProps, 'setMetrics'> {
     return {
         setMetrics: (metrics: TMetrics) => {
-            dispatch(changeCpuUsage(metrics.cpuUsage));
+            dispatch(changeCpuUsage(metrics.cpuUsage ?? []));
         },
     };
 }
