@@ -62,11 +62,11 @@ export const AdminMenu: {
 
             ],
         },
-        {
-            key: '/hpc/info',
-            title: '操作说明',
-            icon: 'search',
-        },
+        // {
+        //     key: '/hpc/info',
+        //     title: '操作说明',
+        //     icon: 'search',
+        // },
     ],
     others: [], // 非菜单相关路由
 };
@@ -85,7 +85,7 @@ export const UserMenu: {
             icon: 'copy',
             subs: [
                 { key: '/hpc/task/taskList', title: '任务列表', component: 'AdvancedTable' },
-                // { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm' },
+                { key: '/hpc/task/taskCreate', title: '任务创建', component: 'BasicForm' },
                 { key: '/hpc/task/taskEnv', title: '环境变量配置', component: 'EditableTable' }
             ],
         },
@@ -104,11 +104,11 @@ export const UserMenu: {
             icon: 'database',
             component: 'MyFileBrowser',
         },
-        {
-            key: '/hpc/info',
-            title: '操作说明',
-            icon: 'search',
-        },
+        // {
+        //     key: '/hpc/info',
+        //     title: '操作说明',
+        //     icon: 'search',
+        // },
     ],
     others: [], // 非菜单相关路由
 };

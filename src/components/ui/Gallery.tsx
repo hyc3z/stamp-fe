@@ -102,7 +102,7 @@ class Gallery extends React.Component {
                             />
                         </div>
                         <div className="pa-m">
-                            <h3>React Admin</h3>
+                            <h3>Hpc管理系统</h3>
                             <small>
                                 <a
                                     href="https://hyc3z.github.io/"
